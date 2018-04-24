@@ -1,16 +1,34 @@
 import mayflower.*;
 
-public class Grass extends Actor {
+public class Grass extends Cell {
 
-    public Grass(){
+    boolean active;
+    boolean available;
+
+    public Grass(int x, int y, int w, int h){
+        super(x,y,w,h);
         setImage("img/grass.png");
         setRotation((int)(Math.random()*4)*90);
+        active = false;
+        Mayflower.setMouseOffset(0,0);
+        available = false;
     }
 
     public void act() {
-        if(Mayflower.mouseClicked(this))
+        if(Mayflower.mouseHovered(this))
         {
-            setImage("img/road.png");
+            active = true;
+            setImage("img/grass-active.png");
         }
+        else if(active)
+        {
+            active = false;
+            setImage("img/grass.png");
+        }
+    }
+
+    public void setAvailable() {
+        available = true;
+        setImage("img/grass-open.png");
     }
 }
