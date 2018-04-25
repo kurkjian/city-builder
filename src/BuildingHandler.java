@@ -23,16 +23,12 @@ public class BuildingHandler extends Actor {
             getMap();
         }
 
-//        List<Actor> atMouse = Mayflower.mouseClicked();
-
         if(Mayflower.mouseDown(this))
         {
             building = true;
-//            System.out.println("DOWN");
         }
         else
         {
-//            System.out.println("UP");
             if(building)
             {
                 building = false;
