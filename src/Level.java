@@ -11,7 +11,7 @@ public class Level extends World {
     private BuildingHandler bh;
 
     public Level() {
-        map = new CellMap(54,54);
+        map = new CellMap(28,17);
         for(int i = 0; i < map.rows(); i++)
         {
             for(int j = 0; j < map.cols(); j++)
