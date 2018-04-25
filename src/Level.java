@@ -1,4 +1,10 @@
+import mayflower.Actor;
+import mayflower.Mayflower;
+import mayflower.MouseInfo;
 import mayflower.World;
+
+import java.util.List;
+
 
 public class Level extends World {
     private CellMap map;
@@ -24,6 +30,17 @@ public class Level extends World {
     {
         if(bh.updateMap() != null)
             map = bh.updateMap();
+
+        /*MouseInfo mouse = Mayflower.getMouseInfo();
+        if(mouse.getX() < 25)
+        {
+            List<Actor> actors = getObjects();
+            for(Actor a : actors)
+            {
+                a.setLocation(a.getX() + 10, a.getY());
+            }
+        }*/
+
     }
 
     public CellMap getMap() {

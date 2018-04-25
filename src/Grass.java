@@ -2,8 +2,8 @@ import mayflower.*;
 
 public class Grass extends Cell {
 
-    boolean active;
-    boolean available;
+    private boolean active;
+    private boolean available;
 
     public Grass(int x, int y, int w, int h){
         super(x,y,w,h);
@@ -23,7 +23,10 @@ public class Grass extends Cell {
         else if(active)
         {
             active = false;
-            setImage("img/grass.png");
+            if(available)
+                setImage("img/grass-open.png");
+            else
+                setImage("img/grass.png");
         }
     }
 
