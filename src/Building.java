@@ -1,6 +1,6 @@
 import mayflower.*;
 
-public class Building extends Actor
+public class Building extends Cell
 {
     private int length;
     private int width;

@@ -1,20 +1,35 @@
 import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import mayflower.*;
 
-import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class BuildingHandler extends Actor {
 
+    Cell selected;
+    Queue<Cell> selectable;
     boolean building;
     boolean hasMap;
     CellMap map;
 
-    public BuildingHandler() {
+    public BuildingHandler(World lvl) {
         setImage("img/bh.png");
 
         building = false;
         hasMap = false;
+
+        selectable = new LinkedList<>();
+
+        selectable.add(new Road(1325, 100, 50, 50));
+        selectable.add(new House(1325, 200));
+        selectable.add(new Factory(1325, 300));
+        selectable.add(new Grass(1325, 400, 50, 50));
+
+        lvl.addObject(selectable.poll(), 1325, 100);
+        lvl.addObject(selectable.poll(), 1325, 200);
+        lvl.addObject(selectable.poll(), 1325, 300);
+        lvl.addObject(selectable.poll(), 1325, 400);
     }
 
     public void act() {
@@ -25,7 +40,7 @@ public class BuildingHandler extends Actor {
 
 //        List<Actor> atMouse = Mayflower.mouseClicked();
 
-        if(Mayflower.mouseDown(this))
+        if(Mayflower.mouseDown(this) && Mayflower.getMouseInfo().getX() < 1300)
         {
             building = true;
 //            System.out.println("DOWN");
@@ -39,15 +54,44 @@ public class BuildingHandler extends Actor {
             }
         }
 
+        if(Mayflower.mouseDown(this) && Mayflower.getMouseInfo().getX() > 1300)
+        {
+            List<Actor> atMouse = Mayflower.mouseClicked();
+            for(Actor a : atMouse)
+            {
+                if (a instanceof Road)
+                {
+                    Cell b = new Road(1, 1, 50, 50);
+                    setSelected(b);
+                }
+                if (a instanceof House)
+                {
+                    Cell b = new House();
+                    setSelected(b);
+                }
+                if (a instanceof Factory)
+                {
+                    Cell b = new Factory();
+                    setSelected(b);
+                }
+                if (a instanceof Grass)
+                {
+                    Cell b = new Grass(1, 1, 50, 50);
+                    setSelected(b);
+                }
+            }
+        }
+
+        refreshSelected();
+
         if(building)
         {
             List<Actor> atMouse = Mayflower.mouseClicked();
             for(Actor a : atMouse)
             {
-                if(a instanceof Grass)
+                if(a instanceof Grass  && a.getX() <= 1300)
                 {
-                   Road road = new Road(a.getX(),a.getY(),50,50);
-                   getWorld().addObject(road, a.getX(), a.getY());
+                   getWorld().addObject(selected, a.getX(), a.getY());
                    for(int i = 0; i < 12; i++)
                    {
                        Cell c;
@@ -78,7 +122,7 @@ public class BuildingHandler extends Actor {
 
 
 
-                   map.setCell(a.getX()/50, a.getY()/50, road);
+                   map.setCell(Mayflower.getMouseInfo().getX()/50, Mayflower.getMouseInfo().getY()/50, selected);
 
                    getWorld().removeObject(a);
                 }
@@ -93,6 +137,31 @@ public class BuildingHandler extends Actor {
             Level l = (Level) getWorld();
             map = l.getMap();
             hasMap = true;
+        }
+    }
+
+    public void setSelected(Cell c)
+    {
+        selected = c;
+    }
+
+    public void refreshSelected()
+    {
+        if (selected instanceof Road)
+        {
+            selected = new Road(1, 1, 50, 50);
+        }
+        if (selected instanceof House)
+        {
+            selected = new House(1, 1);
+        }
+        if (selected instanceof Factory)
+        {
+            selected = new Factory(1, 1);
+        }
+        if (selected instanceof Grass)
+        {
+            selected = new Grass(1, 1, 50, 50);
         }
     }
 

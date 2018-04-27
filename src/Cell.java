@@ -11,6 +11,11 @@ public class Cell extends Actor
     private int height;
     private Image image;
 
+    public Cell()
+    {
+
+    }
+
     public Cell(int a, int b, int w, int h) {
         x = a;
         y = b;
