@@ -6,10 +6,14 @@ public class House extends Building
 {
     private int peopleInHouse;
     private Timer timer;
+    private int  waterCost;
+    private int electricCost;
 
     public House ()
     {
         super(1,1, 5);
+        waterCost=2;
+        electricCost = 2;
 
         setImage("img/House.png");
         peopleInHouse=1;
@@ -25,12 +29,21 @@ public class House extends Building
                 timer.reset();
             }
         }
+        taxReturn();
 
     }
     public double taxReturn()
     {
         double money = 0.5;
         return money* peopleInHouse;
+    }
+    public int getHouseWaterCost()
+    {
+        return waterCost;
+    }
+    public int getHouseElectricCost()
+    {
+        return electricCost;
     }
 
 }
