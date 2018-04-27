@@ -5,6 +5,7 @@ public class Factory extends Building
 {
     private int waterCost;
     private int electricCost;
+
     public Factory()
     {
         super(2,1, 10);
