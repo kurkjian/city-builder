@@ -4,6 +4,7 @@ import mayflower.MouseInfo;
 import mayflower.World;
 
 import java.util.List;
+import java.awt.*;
 
 
 public class Level extends World {
@@ -42,6 +43,12 @@ public class Level extends World {
         }*/
 
     }
+
+    /*public void render(Graphics2D g)
+    {
+        g.setColor(Color.BLUE);
+        g.fillRect(50,50,500,500);
+    }*/
 
     public CellMap getMap() {
         return map;

@@ -10,7 +10,7 @@ public class Runner extends Mayflower
         //Open a GUI Window with the specified title, width, and height
         //DO NOT WRITE ANY ADDITIONAL CODE IN THIS CONSTRUCTOR!
         //You should only change the arguments to the super method.
-        super("Memes(Alpha build .03)", 2560, 1440, true);
+        super("Memes(Alpha build .03)", 1400, 800, true);
     }
 
     //The init method is called as soon as the Mayflower window is Opened.
@@ -23,7 +23,7 @@ public class Runner extends Mayflower
         Mayflower.setFullScreen(true);
 
         //TODO: create a new World
-        World startingWorld = new Level();
+        World startingWorld = new Title();
 
         //TODO: load your world into the Mayflower Window
         Mayflower.setWorld(startingWorld);
