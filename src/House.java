@@ -19,6 +19,13 @@ public class House extends Building
         peopleInHouse=1;
         timer = new Timer(30000);
     }
+
+    public House(int x, int y) {
+        super(x,y,5);
+        setImage("img/House.png");
+        peopleInHouse = 1;
+        timer = new Timer(30000);
+    }
     public void act()
     {
         if(peopleInHouse<4)

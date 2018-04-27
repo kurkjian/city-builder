@@ -31,5 +31,6 @@ public class Road extends Cell {
 
             }
         }
+        return null;
     }
 }
