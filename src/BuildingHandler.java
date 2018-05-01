@@ -9,6 +9,7 @@ public class BuildingHandler extends Actor {
     boolean building;
     boolean hasMap;
     CellMap map;
+    CellMap prevMap;
 
     public BuildingHandler() {
         setImage("img/bh.png");
@@ -21,6 +22,7 @@ public class BuildingHandler extends Actor {
         if(!hasMap)
         {
             getMap();
+            prevMap = map;
         }
 
         if(Mayflower.mouseDown(this))
@@ -32,6 +34,24 @@ public class BuildingHandler extends Actor {
             if(building)
             {
                 building = false;
+            }
+        }
+
+        if(Mayflower.isKeyPressed(Keyboard.KEY_Z))
+        {
+            System.out.println("UNDO");
+            for(int i = 0; i < map.rows(); i++)
+            {
+                for(int j = 0; j < map.cols(); j++)
+                {
+                    if(!map.getCell(i,j).equals(prevMap.getCell(i,j)))
+                    {
+                        System.out.println("change");
+                        getWorld().addObject(prevMap.getCell(i,j),i*50,j*50);
+                        map.setCell(i,j,prevMap.getCell(i,j));
+                        getWorld().removeObject(map.getCell(i,j));
+                    }
+                }
             }
         }
 
@@ -72,9 +92,8 @@ public class BuildingHandler extends Actor {
                        }
                    }
 
-
-
-                   map.setCell(a.getX()/50, a.getY()/50, road);
+                    prevMap = map;
+                    map.setCell(a.getX()/50, a.getY()/50, road);
 
                    getWorld().removeObject(a);
                 }

@@ -17,13 +17,21 @@ public class Runner extends Mayflower
     //This is where you will setup the initial state of your game
     //ie, create the first world of your game
     @Override
-    public void init()
+    public void init ()
     {
         //Set the argument to true if you want your game to run in Full Screen Mode
         Mayflower.setFullScreen(true);
+        World startingWorld = null;
 
         //TODO: create a new World
-        World startingWorld = new Title();
+        try {
+            startingWorld = new Title();
+        }
+        catch (Exception e)
+        {
+            System.out.println("nope");
+        }
+
 
         //TODO: load your world into the Mayflower Window
         Mayflower.setWorld(startingWorld);
