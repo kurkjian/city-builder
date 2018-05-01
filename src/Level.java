@@ -12,7 +12,7 @@ public class Level extends World {
     private BuildingHandler bh;
 
     public Level() {
-        map = new CellMap(54,54);
+        map = new CellMap(26,16);
         for(int i = 0; i < map.rows(); i++)
         {
             for(int j = 0; j < map.cols(); j++)
@@ -23,7 +23,7 @@ public class Level extends World {
             }
         }
 
-        bh = new BuildingHandler();
+        bh = new BuildingHandler(this);
         addObject(bh,0,0);
     }
 

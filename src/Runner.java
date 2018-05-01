@@ -10,7 +10,7 @@ public class Runner extends Mayflower
         //Open a GUI Window with the specified title, width, and height
         //DO NOT WRITE ANY ADDITIONAL CODE IN THIS CONSTRUCTOR!
         //You should only change the arguments to the super method.
-        super("Memes(Alpha build .03)", 1400, 800, true);
+        super("Memes(Alpha build .03)", 1405, 825, true);
     }
 
     //The init method is called as soon as the Mayflower window is Opened.
