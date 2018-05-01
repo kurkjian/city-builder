@@ -34,4 +34,9 @@ public class Grass extends Cell {
         available = true;
         setImage("img/grass-open.png");
     }
+
+    public String toString()
+    {
+        return "0";
+    }
 }

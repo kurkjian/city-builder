@@ -44,6 +44,11 @@ public class House extends Building
         double money = 0.5;
         return money* peopleInHouse;
     }
+
+    public String toString() {
+        return "2";
+    }
+
     public int getHouseWaterCost()
     {
         return waterCost;

@@ -21,10 +21,13 @@ public class BuildingHandler extends Actor {
         selectable.add(new House(1325, 200));
         selectable.add(new Factory(1325, 300));
         selectable.add(new Grass(1325, 400, 50, 50));
+        selectable.add(new Save(1325, 500, 50, 50));
+
         lvl.addObject(selectable.poll(), 1325, 100);
         lvl.addObject(selectable.poll(), 1325, 200);
         lvl.addObject(selectable.poll(), 1325, 300);
         lvl.addObject(selectable.poll(), 1325, 400);
+        lvl.addObject(selectable.poll(), 1325, 500);
     }
 
     public void act() {

@@ -33,4 +33,9 @@ public class Road extends Cell {
         }
         return null;
     }
+
+    public String toString()
+    {
+        return "1";
+    }
 }

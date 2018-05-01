@@ -24,6 +24,12 @@ public class Factory extends Building
     {
 
     }
+
+    public String toString()
+    {
+        return "3";
+    }
+
     public int getFactoryWaterCost()
     {
         return waterCost;
