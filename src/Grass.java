@@ -37,6 +37,9 @@ public class Grass extends Cell {
 
     public String toString()
     {
-        return "0";
+        if(!available)
+            return "0";
+
+        return "-1";
     }
 }

@@ -43,6 +43,9 @@ public class Title extends World {
                     }
                     s.nextLine();
                 }
+
+                World level = new Level(map);
+                Mayflower.setWorld(level);
             }
             catch (Exception e)
             {
@@ -59,6 +62,19 @@ public class Title extends World {
         if(id == 0)
             return new Grass(i * 50, j * 50, 50,50);
         if(id == 1)
+            return new Road(i * 50, j * 50, 50,50);
+        if(id == 2)
+            return new House(1,1);
+        if(id == 3)
+            return new Factory(i,j);
 
+        if(id == -1)
+        {
+            Grass g = new Grass(i*50, j*50, 50,50);
+            g.setAvailable();
+            return g;
+        }
+
+        return null;
     }
 }

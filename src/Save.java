@@ -4,10 +4,12 @@ import java.io.*;
 public class Save extends Cell {
 
     CellMap map;
+    boolean saved;
 
     public Save(int x, int y, int w, int h) {
         super(x,y,w,h);
-        setImage("img/save.png");
+        setImage("img/save-yes.png");
+        saved = true;
     }
 
     public void act()
@@ -15,6 +17,7 @@ public class Save extends Cell {
         if(Mayflower.mouseClicked(this))
         {
             saveGame();
+            updateSave(true);
         }
     }
 
@@ -28,11 +31,11 @@ public class Save extends Cell {
             PrintWriter out = new PrintWriter(bw, true);
 
             Cell[][] grid = map.getMap();
-            for(int i = 0; i < grid[0].length; i++)
+            for(int i = 0; i < grid.length; i++)
             {
-                for(int j = grid.length - 1; j >= 0; j--)
+                for(int j = 0; j < grid[0].length; j++)
                 {
-                    out.printf("%1s ", grid[j][i]);
+                    out.printf("%2s ", grid[i][j]);
                 }
                 out.println();
             }
@@ -44,6 +47,15 @@ public class Save extends Cell {
         {
             e.printStackTrace();
         }
+    }
+
+    public void updateSave(boolean b)
+    {
+        saved = b;
+        if(saved)
+            setImage("img/save-yes.png");
+        else
+            setImage("img/save-no.png");
     }
 
 }

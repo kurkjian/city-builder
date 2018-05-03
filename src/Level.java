@@ -25,6 +25,22 @@ public class Level extends World {
 
         bh = new BuildingHandler(this);
         addObject(bh,0,0);
+
+    }
+
+    public Level(CellMap map)
+    {
+        this.map = map;
+        for(int i = 0; i < map.rows(); i++)
+        {
+            for(int j = 0; j < map.cols(); j++)
+            {
+                Cell c = map.getCell(i,j);
+                addObject(c, i * 50, j * 50);
+            }
+        }
+        bh = new BuildingHandler(this);
+        addObject(bh,0,0);
     }
 
     public void act()

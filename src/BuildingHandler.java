@@ -9,6 +9,7 @@ public class BuildingHandler extends Actor {
     boolean building;
     boolean hasMap;
     CellMap map;
+    Save save;
 
     public BuildingHandler(World lvl) {
         setImage("img/bh.png");
@@ -27,7 +28,10 @@ public class BuildingHandler extends Actor {
         lvl.addObject(selectable.poll(), 1325, 200);
         lvl.addObject(selectable.poll(), 1325, 300);
         lvl.addObject(selectable.poll(), 1325, 400);
-        lvl.addObject(selectable.poll(), 1325, 500);
+
+        save = (Save) selectable.poll();
+
+        lvl.addObject(save, 1325, 500);
     }
 
     public void act() {
@@ -80,6 +84,7 @@ public class BuildingHandler extends Actor {
 
         if(building)
         {
+            save.updateSave(false);
             List<Actor> atMouse = Mayflower.mouseClicked();
             for(Actor a : atMouse)
             {
