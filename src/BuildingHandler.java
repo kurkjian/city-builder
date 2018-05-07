@@ -12,12 +12,14 @@ public class BuildingHandler extends Actor {
     boolean building;
     boolean hasMap;
     CellMap map;
+    Level l;
 
-    public BuildingHandler(World lvl) {
+    public BuildingHandler(Level lvl) {
         setImage("img/bh.png");
 
         building = false;
         hasMap = false;
+        l = lvl;
 
         selectable = new LinkedList<>();
 
@@ -61,25 +63,26 @@ public class BuildingHandler extends Actor {
             {
                 if (a instanceof Road)
                 {
-                    Cell b = new Road(1, 1, 50, 50);
+                    Cell b = new Road(Mayflower.getMouseInfo().getX(), Mayflower.getMouseInfo().getY(), 50, 50);
                     setSelected(b);
                 }
-                if (a instanceof House)
+                else if (a instanceof House)
                 {
                     Cell b = new House();
                     setSelected(b);
                 }
-                if (a instanceof Factory)
+                else if (a instanceof Factory)
                 {
                     Cell b = new Factory();
                     setSelected(b);
                 }
-                if (a instanceof Grass)
+                else if (a instanceof Grass)
                 {
-                    Cell b = new Grass(1, 1, 50, 50);
+                    Cell b = new Grass(Mayflower.getMouseInfo().getX(), Mayflower.getMouseInfo().getY(), 50, 50);
                     setSelected(b);
                 }
             }
+            SelectedInfo();
         }
 
         refreshSelected();
@@ -89,46 +92,35 @@ public class BuildingHandler extends Actor {
             List<Actor> atMouse = Mayflower.mouseClicked();
             for(Actor a : atMouse)
             {
-                if(a instanceof Grass  && a.getX() <= 1300)
+                if (a instanceof Grass && selected instanceof Road && a.getX() <= 1300)
                 {
-                   getWorld().addObject(selected, a.getX(), a.getY());
-                   for(int i = 0; i < 12; i++)
-                   {
-                       Cell c;
+                    getWorld().addObject(selected, a.getX(), a.getY());
+                    map.setCell(Mayflower.getMouseInfo().getX()/50, Mayflower.getMouseInfo().getY()/50, selected);
+                    getWorld().removeObject(a);
+                    Road r = (Road) selected;
+                    l.setMoney(l.getMoney() - r.getCost());
+                }
+                else if(a instanceof Grass && a.getX() <= 1300 && !(selected instanceof Grass))
+                {
+                    Grass g = (Grass) a;
+                    if (g.isAvailable()){
+                        getWorld().addObject(selected, a.getX(), a.getY());
+                        map.setCell(Mayflower.getMouseInfo().getX()/50, Mayflower.getMouseInfo().getY()/50, selected);
+                        getWorld().removeObject(a);
+                        Building b = (Building) selected;
+                        l.setMoney(l.getMoney() - b.getCost());
+                    }
+                }
+                else if (selected instanceof Grass && a.getX() <= 1300)
+                {
+                    getWorld().addObject(selected, a.getX(), a.getY());
+                    map.setCell(Mayflower.getMouseInfo().getX()/50, Mayflower.getMouseInfo().getY()/50, selected);
+                    getWorld().removeObject(a);
 
-                       if(i < 3)
-                       {
-                           c = map.getCell(a.getX()/50, a.getY()/50 - i - 1);
-                       }
-                       else if (i < 6)
-                       {
-                           c = map.getCell(a.getX()/50, a.getY()/50 + i + 1 - 3);
-                       }
-                       else if (i < 9)
-                       {
-                           c = map.getCell(a.getX()/50 - 1 - i + 6, a.getY()/50);
-                       }
-                       else
-                       {
-                           c = map.getCell(a.getX()/50 + 1 + i - 9, a.getY()/50);
-                       }
-
-                       if(c instanceof Grass)
-                       {
-                           Grass g = (Grass)c;
-                           g.setAvailable();
-                       }
-                   }
-
-
-
-                   map.setCell(Mayflower.getMouseInfo().getX()/50, Mayflower.getMouseInfo().getY()/50, selected);
-
-                   getWorld().removeObject(a);
                 }
             }
+            refreshAvailable();
         }
-
     }
 
     public void getMap() {
@@ -149,19 +141,79 @@ public class BuildingHandler extends Actor {
     {
         if (selected instanceof Road)
         {
-            selected = new Road(1, 1, 50, 50);
+            selected = new Road(Mayflower.getMouseInfo().getX(), Mayflower.getMouseInfo().getY(), 50, 50);
         }
-        if (selected instanceof House)
+        else if (selected instanceof House)
         {
-            selected = new House(1, 1);
+            selected = new House(Mayflower.getMouseInfo().getX(), Mayflower.getMouseInfo().getY());
         }
-        if (selected instanceof Factory)
+        else if (selected instanceof Factory)
         {
-            selected = new Factory(1, 1);
+            selected = new Factory(Mayflower.getMouseInfo().getX(), Mayflower.getMouseInfo().getY());
         }
-        if (selected instanceof Grass)
+        else if (selected instanceof Grass)
         {
-            selected = new Grass(1, 1, 50, 50);
+            selected = new Grass(Mayflower.getMouseInfo().getX(), Mayflower.getMouseInfo().getY(), 50, 50);
+        }
+    }
+
+    public void refreshAvailable()
+    {
+        for (int row = 0; row < map.rows(); row++)
+        {
+            for (int col = 0; col < map.cols(); col++)
+            {
+                if (map.getCell(row, col) instanceof Road)
+                {
+                    Road a = (Road) map.getCell(row, col);
+                    for(int i = 0; i < 12; i++)
+                    {
+                    Cell c;
+
+                    if(i < 3)
+                    {
+                    c = map.getCell(a.getX()/50, a.getY()/50 - i - 1);
+                    }
+                    else if (i < 6)
+                    {
+                    c = map.getCell(a.getX()/50, a.getY()/50 + i + 1 - 3);
+                    }
+                    else if (i < 9)
+                    {
+                    c = map.getCell(a.getX()/50 - 1 - i + 6, a.getY()/50);
+                    }
+                    else
+                    {
+                    c = map.getCell(a.getX()/50 + 1 + i - 9, a.getY()/50);
+                    }
+
+                    if(c instanceof Grass)
+                    {
+                    Grass g = (Grass)c;
+                    g.setAvailable();
+                    }
+                    }
+                }
+            }
+        }
+    }
+
+    public void SelectedInfo()
+    {
+        if (selected instanceof Road)
+        {
+            getWorld().showText("Road", 15, 1325, 500, Color.BLACK);
+            getWorld().showText("Cost: 1", 15, 1325, 525, Color.BLACK);
+        }
+        else if (selected instanceof House)
+        {
+            getWorld().showText("House", 15, 1325, 500, Color.BLACK);
+            getWorld().showText("Cost: 5", 15, 1325, 525, Color.BLACK);
+        }
+        else if (selected instanceof Factory)
+        {
+            getWorld().showText("Factory", 15, 1325, 500, Color.BLACK);
+            getWorld().showText("Cost: 10", 15, 1325, 525, Color.BLACK);
         }
     }
 

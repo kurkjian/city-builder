@@ -23,7 +23,7 @@ public class Runner extends Mayflower
         Mayflower.setFullScreen(true);
 
         //TODO: create a new World
-        World startingWorld = new Level();
+        World startingWorld = new Title();
 
         //TODO: load your world into the Mayflower Window
         Mayflower.setWorld(startingWorld);
