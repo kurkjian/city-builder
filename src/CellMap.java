@@ -38,4 +38,20 @@ public class CellMap {
     public int cols() {
         return map[0].length;
     }
+
+    public String toString()
+    {
+        String ret = "";
+        for(int i = 0; i < rows(); i++)
+        {
+            for(int j = 0; j < cols(); j++)
+            {
+                ret += String.format("%2s ", getCell(i,j).toString());
+            }
+            ret += "\n";
+        }
+
+        return ret;
+    }
+
 }

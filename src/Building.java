@@ -18,6 +18,8 @@ public class Building extends Cell
 
     }
 
-
-
+    public int getCost()
+    {
+        return cost;
+    }
 }

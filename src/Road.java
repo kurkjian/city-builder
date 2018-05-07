@@ -1,37 +1,33 @@
 import mayflower.*;
 
-import java.util.List;
-import java.util.Map;
-
 public class Road extends Cell {
-    private CellMap map;
+    boolean active;
+    int cost;
     public Road(int x, int y, int w, int h) {
-        super(x,y,w,h);
+        super(x,y, w, h);
         setImage("img/road.png");
+        active = false;
+        cost = 1;
     }
 
-    public void act()
-    {
-
+    public void act() {
+        if(Mayflower.mouseHovered(this))
+        {
+            active = true;
+            setImage("img/road-active.png");
+            getWorld().showText("Road", 15, 1325, 600, Color.BLACK);
+            getWorld().showText(" ", 15, 1325, 625, Color.BLACK);
+        }
+        else if(active)
+        {
+            active = false;
+            setImage("img/road.png");
+        }
     }
 
-
-    public List<Road> junctionPoints()
+    public int getCost()
     {
-        if(getWorld() instanceof Level)
-        {
-            Level l= (Level) getWorld();
-            map=l.getMap();
-        }
-        Cell[][] cellMap=map.getMap();
-        for(int r =0; r < cellMap.length; r++)
-        {
-            for(int c =0; c< cellMap[0].length; c++ )
-            {
-
-            }
-        }
-        return null;
+        return cost;
     }
 
     public String toString()

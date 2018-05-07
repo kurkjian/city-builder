@@ -8,14 +8,21 @@ public class BuildingHandler extends Actor {
     Queue<Cell> selectable;
     boolean building;
     boolean hasMap;
-    CellMap map;
-    Save save;
 
-    public BuildingHandler(World lvl) {
+
+    CellMap map;
+    Stack<CellMap> mapHist;
+
+    Save save;
+    Level l;
+
+    public BuildingHandler(Level lvl) {
         setImage("img/bh.png");
 
         building = false;
         hasMap = false;
+        l = lvl;
+        mapHist = new Stack<>();
 
         selectable = new LinkedList<>();
         selectable.add(new Road(1325, 100, 50, 50));
@@ -38,6 +45,17 @@ public class BuildingHandler extends Actor {
         if(!hasMap)
         {
             getMap();
+        }
+
+
+        if(mapHist.size() > 50)
+        {
+            mapHist.removeElementAt(0);
+        }
+        if(Mayflower.isKeyPressed(Keyboard.KEY_Z) && mapHist.size() > 0)
+        {
+            renderMap();
+            System.out.println("UNDO");
         }
 
         if(Mayflower.mouseDown(this) && Mayflower.getMouseInfo().getX() < 1300)
@@ -88,44 +106,36 @@ public class BuildingHandler extends Actor {
             List<Actor> atMouse = Mayflower.mouseClicked();
             for(Actor a : atMouse)
             {
-                if(a instanceof Grass && a.getX() <= 1300)
+                if (a instanceof Grass && selected instanceof Road && a.getX() <= 1300)
                 {
-
-                   for(int i = 0; i < 12; i++)
-                   {
-                       Cell c;
-                       getWorld().addObject(selected, a.getX(), a.getY());
-                       if(i < 3)
-                       {
-                           c = map.getCell(a.getX()/50, a.getY()/50 - i - 1);
-                       }
-                       else if (i < 6)
-                       {
-                           c = map.getCell(a.getX()/50, a.getY()/50 + i + 1 - 3);
-                       }
-                       else if (i < 9)
-                       {
-                           c = map.getCell(a.getX()/50 - 1 - i + 6, a.getY()/50);
-                       }
-                       else
-                       {
-                           c = map.getCell(a.getX()/50 + 1 + i - 9, a.getY()/50);
-                       }
-
-                       if(c instanceof Grass)
-                       {
-                           Grass g = (Grass)c;
-                           g.setAvailable();
-                       }
-                   }
-
-
-
+                    getWorld().addObject(selected, a.getX(), a.getY());
                     map.setCell(Mayflower.getMouseInfo().getX()/50, Mayflower.getMouseInfo().getY()/50, selected);
+                    getWorld().removeObject(a);
+                    Road r = (Road) selected;
+                    l.setMoney(l.getMoney() - r.getCost());
 
-                   getWorld().removeObject(a);
+                }
+                else if(a instanceof Grass && a.getX() <= 1300 && !(selected instanceof Grass))
+                {
+                    Grass g = (Grass) a;
+                    if (g.isAvailable()){
+                        getWorld().addObject(selected, a.getX(), a.getY());
+                        map.setCell(Mayflower.getMouseInfo().getX()/50, Mayflower.getMouseInfo().getY()/50, selected);
+                        getWorld().removeObject(a);
+                        Building b = (Building) selected;
+                        l.setMoney(l.getMoney() - b.getCost());
+                    }
+                }
+                else if (selectable != null && a != null && selected instanceof Grass && a.getX() <= 1300)
+                {
+                    getWorld().addObject(selected, a.getX(), a.getY());
+                    map.setCell(Mayflower.getMouseInfo().getX()/50, Mayflower.getMouseInfo().getY()/50, selected);
+                    getWorld().removeObject(a);
                 }
             }
+
+            refreshAvailable();
+            compareMaps();
         }
 
     }
@@ -139,19 +149,79 @@ public class BuildingHandler extends Actor {
     {
         if (selected instanceof Road)
         {
-            selected = new Road(1, 1, 50, 50);
+            selected = new Road(Mayflower.getMouseInfo().getX(), Mayflower.getMouseInfo().getY(), 50, 50);
         }
-        if (selected instanceof House)
+        else if (selected instanceof House)
         {
-            selected = new House(1, 1);
+            selected = new House(Mayflower.getMouseInfo().getX(), Mayflower.getMouseInfo().getY());
         }
-        if (selected instanceof Factory)
+        else if (selected instanceof Factory)
         {
-            selected = new Factory(1, 1);
+            selected = new Factory(Mayflower.getMouseInfo().getX(), Mayflower.getMouseInfo().getY());
         }
-        if (selected instanceof Grass)
+        else if (selected instanceof Grass)
         {
-            selected = new Grass(1, 1, 50, 50);
+            selected = new Grass(Mayflower.getMouseInfo().getX(), Mayflower.getMouseInfo().getY(), 50, 50);
+        }
+    }
+
+    public void refreshAvailable()
+    {
+        for (int row = 0; row < map.rows(); row++)
+        {
+            for (int col = 0; col < map.cols(); col++)
+            {
+                if (map.getCell(row, col) instanceof Road)
+                {
+                    Road a = (Road) map.getCell(row, col);
+                    for(int i = 0; i < 12; i++)
+                    {
+                        Cell c;
+
+                        if(i < 3)
+                        {
+                            c = map.getCell(a.getX()/50, a.getY()/50 - i - 1);
+                        }
+                        else if (i < 6)
+                        {
+                            c = map.getCell(a.getX()/50, a.getY()/50 + i + 1 - 3);
+                        }
+                        else if (i < 9)
+                        {
+                            c = map.getCell(a.getX()/50 - 1 - i + 6, a.getY()/50);
+                        }
+                        else
+                        {
+                            c = map.getCell(a.getX()/50 + 1 + i - 9, a.getY()/50);
+                        }
+
+                        if(c instanceof Grass)
+                        {
+                            Grass g = (Grass)c;
+                            g.setAvailable();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void SelectedInfo()
+    {
+        if (selected instanceof Road)
+        {
+            getWorld().showText("Road", 15, 1325, 500, Color.BLACK);
+            getWorld().showText("Cost: 1", 15, 1325, 525, Color.BLACK);
+        }
+        else if (selected instanceof House)
+        {
+            getWorld().showText("House", 15, 1325, 500, Color.BLACK);
+            getWorld().showText("Cost: 5", 15, 1325, 525, Color.BLACK);
+        }
+        else if (selected instanceof Factory)
+        {
+            getWorld().showText("Factory", 15, 1325, 500, Color.BLACK);
+            getWorld().showText("Cost: 10", 15, 1325, 525, Color.BLACK);
         }
     }
 
@@ -168,4 +238,46 @@ public class BuildingHandler extends Actor {
     public CellMap updateMap() {
         return map;
     }
+
+    public void renderMap()
+    {
+        CellMap temp = map;
+        map = mapHist.pop();
+
+        System.out.println(temp);
+        System.out.println();
+        System.out.println(map);
+
+        for(int i = 0; i < map.rows(); i++)
+        {
+            for(int j = 0; j < map.cols(); j++)
+            {
+                getWorld().removeObject(temp.getCell(i,j));
+                getWorld().addObject(map.getCell(i,j), i * 50, j * 50);
+            }
+        }
+    }
+
+    public void compareMaps()
+    {
+        CellMap prev = mapHist.peek();
+        for(int i = 0; i < map.rows(); i++)
+        {
+            for(int j = 0; j < map.cols(); j++)
+            {
+                Cell prevCell = prev.getCell(i,j);
+                Cell newCell = map.getCell(i,j);
+
+                if(prevCell.getClass().equals(newCell.getClass()))
+                {
+                    if(prevCell instanceof Grass)
+                    {
+                        prevCell = (Grass) prevCell;
+                        newCell = (Grass) newCell;
+                    }
+                }
+            }
+        }
+    }
+
 }
