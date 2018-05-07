@@ -7,6 +7,7 @@ public class House extends Building
     private int peopleInHouse;
     private Timer timer;
     boolean active;
+    boolean working;
 
     public House ()
     {
@@ -16,6 +17,7 @@ public class House extends Building
         peopleInHouse=1;
         timer = new Timer(999999999);
         active = false;
+        working = false;
     }
 
     public House(int x, int y)
@@ -25,6 +27,7 @@ public class House extends Building
         peopleInHouse=1;
         timer = new Timer(999999999);
         active = false;
+        working = false;
     }
     public void act()
     {
@@ -33,7 +36,15 @@ public class House extends Building
             active = true;
             setImage("img/house-active.png");
             getWorld().showText("House", 15, 1325, 600, Color.BLACK);
-            getWorld().showText("People: " + peopleInHouse, 15, 1325, 625, Color.BLACK);
+            getWorld().showText("People: " + peopleInHouse, 15, 1320, 620, Color.BLACK);
+            if (working)
+            {
+                getWorld().showText("Working", 15, 1325, 640, Color.BLACK);
+            }
+            else
+            {
+                getWorld().showText("Not working", 15, 1305, 640, Color.BLACK);
+            }
         }
         else if(active)
         {
@@ -52,13 +63,20 @@ public class House extends Building
     }
     public double taxReturn()
     {
-        double money = 0.25;
+        double money = 0.5;
         return money* peopleInHouse;
     }
 
     public int getPeople()
     {
         return peopleInHouse;
+    }
+
+    public void setWorking(boolean b) {working = b;}
+
+    public boolean isWorking()
+    {
+        return working;
     }
 
 }

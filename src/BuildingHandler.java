@@ -21,6 +21,8 @@ public class BuildingHandler extends Actor {
         hasMap = false;
         l = lvl;
 
+        lvl.addObject(new BuildMenu(1300, 0), 1300, 0);
+
         selectable = new LinkedList<>();
 
         selectable.add(new Road(1325, 100, 50, 50));

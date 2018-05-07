@@ -16,7 +16,8 @@ public class Road extends Cell {
             active = true;
             setImage("img/road-active.png");
             getWorld().showText("Road", 15, 1325, 600, Color.BLACK);
-            getWorld().showText(" ", 15, 1325, 625, Color.BLACK);
+            getWorld().showText(" ", 15, 1320, 620, Color.BLACK);
+            getWorld().showText(" ", 15, 1305, 640, Color.BLACK);
         }
         else if(active)
         {

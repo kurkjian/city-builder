@@ -11,6 +11,7 @@ public class Level extends World {
     int population;
     int power;
     double money;
+    int jobs;
     Timer timer;
 
     public Level() {
@@ -30,6 +31,7 @@ public class Level extends World {
         population = 0;
         power = 0;
         money = 500;
+        jobs = 0;
 
         bh = new BuildingHandler(this);
         addObject(bh,0,0);
@@ -98,28 +100,46 @@ public class Level extends World {
         int pop = 0;
         int fo = 0;
         int pow = 0;
+        int jo = 0;
         for (int r = 0; r < map.rows(); r++)
         {
             for (int c = 0; c < map.cols(); c++)
             {
-                if (map.getCell(r, c) instanceof House)
+                if (map.getCell(r, c) instanceof Factory)
+                {
+                    jo = jo + 16;
+                }
+                else if (map.getCell(r, c) instanceof House)
                 {
                     House h = (House) map.getCell(r, c);
                     pop = pop + h.getPeople();
+                    jo = jo - h.getPeople();
+                    if (jo > 0)
+                    {
+                        h.setWorking(true);
+                        map.setCell(r, c, h);
+                    }
+                    else
+                    {
+                        h.setWorking(false);
+                        map.setCell(r, c, h);
+                    }
                 }
             }
         }
         population = pop;
         food = fo;
         power = pow;
+        jobs = jo;
     }
 
     public void printInfo()
     {
         showText("Money: " + money, 12, 1305, 675, Color.BLACK);
         showText("Population: " + population, 12, 1305, 700, Color.BLACK);
-        showText("Food: " + food, 12, 1305, 725, Color.BLACK);
-        showText("Power: " + power, 12, 1305, 750, Color.BLACK);
+        showText("Jobs: " + jobs, 12, 1305, 725, Color.BLACK);
+        showText("Food: " + food, 12, 1305, 750, Color.BLACK);
+        showText("Power: " + power, 12, 1305, 775, Color.BLACK);
     }
 
     public void taxes()
@@ -131,7 +151,17 @@ public class Level extends World {
                 if (map.getCell(r, c) instanceof House)
                 {
                     House h = (House) map.getCell(r, c);
-                    setMoney(getMoney() + h.taxReturn());
+                    if (h.isWorking()) {
+                        setMoney(getMoney() + h.taxReturn());
+                    }
+                    else
+                    {
+                        setMoney(getMoney() - h.taxReturn());
+                    }
+                }
+                if (map.getCell(r, c) instanceof Factory)
+                {
+                    setMoney(getMoney() - 5);
                 }
             }
         }
