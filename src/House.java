@@ -1,7 +1,5 @@
 import mayflower.*;
 
-
-
 public class House extends Building
 {
     private int peopleInHouse;

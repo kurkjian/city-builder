@@ -1,6 +1,5 @@
 import mayflower.*;
 
-
 public class Factory extends Building
 {
     boolean active;
