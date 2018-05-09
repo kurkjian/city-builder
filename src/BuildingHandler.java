@@ -45,6 +45,7 @@ public class BuildingHandler extends Actor {
         if(!hasMap)
         {
             getMap();
+            mapHist.push(map);
         }
 
 
@@ -55,7 +56,6 @@ public class BuildingHandler extends Actor {
         if(Mayflower.isKeyPressed(Keyboard.KEY_Z) && mapHist.size() > 0)
         {
             renderMap();
-            System.out.println("UNDO");
         }
 
         if(Mayflower.mouseDown(this) && Mayflower.getMouseInfo().getX() < 1300)
@@ -241,25 +241,29 @@ public class BuildingHandler extends Actor {
 
     public void renderMap()
     {
-        CellMap temp = map;
-        map = mapHist.pop();
+        CellMap curr = map;
+        CellMap newMap = mapHist.pop();
 
-        System.out.println(temp);
+        System.out.println(newMap);
         System.out.println();
-        System.out.println(map);
+        System.out.println(curr);
 
         for(int i = 0; i < map.rows(); i++)
         {
             for(int j = 0; j < map.cols(); j++)
             {
-                getWorld().removeObject(temp.getCell(i,j));
-                getWorld().addObject(map.getCell(i,j), i * 50, j * 50);
+                getWorld().removeObject(curr.getCell(i,j));
+                getWorld().addObject(newMap.getCell(i,j), i * 50, j * 50);
             }
         }
+
+        map = newMap;
     }
 
     public void compareMaps()
     {
+        if(mapHist.size() < 1)
+            return;
         CellMap prev = mapHist.peek();
         for(int i = 0; i < map.rows(); i++)
         {
@@ -268,12 +272,22 @@ public class BuildingHandler extends Actor {
                 Cell prevCell = prev.getCell(i,j);
                 Cell newCell = map.getCell(i,j);
 
-                if(prevCell.getClass().equals(newCell.getClass()))
+//                System.out.println("prev: " + prevCell.getClass() + " " + "curr: " + newCell.getClass());
+
+                if(!prevCell.getClass().equals(newCell.getClass()))
+                {
+                    mapHist.push(map);
+                    return;
+                }
+                else
                 {
                     if(prevCell instanceof Grass)
                     {
-                        prevCell = (Grass) prevCell;
-                        newCell = (Grass) newCell;
+                        if(((Grass) prevCell).isAvailable() != ((Grass) newCell).isAvailable())
+                        {
+                            mapHist.push(map);
+                            return;
+                        }
                     }
                 }
             }
