@@ -11,6 +11,7 @@ public class BuildingHandler extends Actor {
 
 
     CellMap map;
+    CellMap prevMap;
     Stack<CellMap> mapHist;
 
     Save save;
@@ -45,7 +46,9 @@ public class BuildingHandler extends Actor {
         if(!hasMap)
         {
             getMap();
-            mapHist.push(map);
+            prevMap = map.copy();
+//            System.out.println(prevMap);
+            mapHist.push(prevMap);
         }
 
 
@@ -55,6 +58,7 @@ public class BuildingHandler extends Actor {
         }
         if(Mayflower.isKeyPressed(Keyboard.KEY_Z) && mapHist.size() > 0)
         {
+            System.out.println(prevMap);
             renderMap();
         }
 
@@ -243,7 +247,7 @@ public class BuildingHandler extends Actor {
     {
         CellMap curr = map;
         CellMap newMap = mapHist.pop();
-
+//        CellMap newMap = new CellMap(0);
         System.out.println(newMap);
         System.out.println();
         System.out.println(curr);
@@ -276,7 +280,9 @@ public class BuildingHandler extends Actor {
 
                 if(!prevCell.getClass().equals(newCell.getClass()))
                 {
-                    mapHist.push(map);
+                    mapHist.push(new CellMap(0));
+                    prevMap = map.copy();
+                    System.out.println("different cells");
                     return;
                 }
                 else
@@ -285,7 +291,9 @@ public class BuildingHandler extends Actor {
                     {
                         if(((Grass) prevCell).isAvailable() != ((Grass) newCell).isAvailable())
                         {
-                            mapHist.push(map);
+                            mapHist.push(new CellMap(0));
+                            prevMap = map.copy();
+                            System.out.println("wrong grass");
                             return;
                         }
                     }
