@@ -13,6 +13,7 @@ public class Level extends World {
     double money;
     int jobs;
     Timer timer;
+    boolean gameOver;
 
     public Level() {
         map = new CellMap(26,16);
@@ -33,32 +34,29 @@ public class Level extends World {
         money = 500;
         jobs = 0;
 
+        gameOver = false;
+
         bh = new BuildingHandler(this);
         addObject(bh,0,0);
     }
 
     public void act()
     {
-        if(bh.updateMap() != null)
-            map = bh.updateMap();
+        if (gameOver == false) {
+            if (bh.updateMap() != null)
+                map = bh.updateMap();
             updateInfo();
             printInfo();
-            if (timer.isDone())
-            {
+            if (timer.isDone()) {
                 taxes();
                 timer.reset();
             }
-
-        /*MouseInfo mouse = Mayflower.getMouseInfo();
-        if(mouse.getX() < 25)
+            isGameOver();
+        }
+        else
         {
-            List<Actor> actors = getObjects();
-            for(Actor a : actors)
-            {
-                a.setLocation(a.getX() + 10, a.getY());
-            }
-        }*/
-
+            addObject(new GameOver(), 0, 0);
+        }
     }
 
     public int getPopulation()
@@ -95,6 +93,14 @@ public class Level extends World {
         money = n;
     }
 
+    public void isGameOver()
+    {
+        if (money < -20000)
+        {
+            gameOver = true;
+        }
+    }
+
     public void updateInfo()
     {
         int pop = 0;
@@ -113,12 +119,34 @@ public class Level extends World {
         {
             for (int col = 0; col < map.cols(); col++)
             {
+                if (map.getCell(row, col) instanceof WindTurbine)
+                {
+                    pow = pow + 10;
+                }
+            }
+        }
+        for (int row = 0; row < map.rows(); row++)
+        {
+            for (int col = 0; col < map.cols(); col++)
+            {
+                if (map.getCell(row, col) instanceof Farm)
+                {
+                    fo = fo + 32;
+                }
+            }
+        }
+        for (int row = 0; row < map.rows(); row++)
+        {
+            for (int col = 0; col < map.cols(); col++)
+            {
                 if (map.getCell(row, col) instanceof House)
                 {
                     House h = (House) map.getCell(row, col);
                     pop = pop + h.getPeople();
                     jo = jo - h.getPeople();
-                    if (jo >= 0) {
+                    pow = pow - 1;
+                    fo = fo - (1 * h.getPeople());
+                    if (jo >= 0 && pow >= 0 && fo >= 0) {
                         h.setWorking(true);
                         map.setCell(row, col, h);
                     } else {
@@ -156,16 +184,6 @@ public class Level extends World {
                 }
             }
         }
-        for (int row = 0; row < map.rows(); row++)
-        {
-            for (int col = 0; col < map.cols(); col++)
-            {
-                if (map.getCell(row, col) instanceof WindTurbine)
-                {
-                    pow = pow + 5;
-                    }
-            }
-        }
         population = pop;
         food = fo;
         power = pow;
@@ -176,7 +194,7 @@ public class Level extends World {
     {
         showText("Money: " + money, 12, 1305, 675, Color.BLACK);
         showText("Population: " + population, 12, 1305, 700, Color.BLACK);
-        showText("Jobs: " + jobs, 12, 1305, 725, Color.BLACK);
+        showText("Open Jobs: " + jobs, 12, 1305, 725, Color.BLACK);
         showText("Food: " + food, 12, 1305, 750, Color.BLACK);
         showText("Power: " + power, 12, 1305, 775, Color.BLACK);
     }

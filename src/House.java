@@ -38,10 +38,12 @@ public class House extends Building
             if (working)
             {
                 getWorld().showText("Working", 15, 1325, 640, Color.BLACK);
+                getWorld().showText(" ", 15, 1305, 640, Color.BLACK);
             }
             else
             {
                 getWorld().showText("Not working", 15, 1305, 640, Color.BLACK);
+                getWorld().showText(" ", 15, 1325, 640, Color.BLACK);
             }
         }
         else if(active)

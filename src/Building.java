@@ -22,4 +22,6 @@ public class Building extends Cell
     {
         return cost;
     }
+
+    public int getPowerCost() { return cost;}
 }

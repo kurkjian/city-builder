@@ -29,13 +29,15 @@ public class BuildingHandler extends Actor {
         selectable.add(new House(1325, 100));
         selectable.add(new Factory(1325, 175));
         selectable.add(new WindTurbine(1325, 250));
-        selectable.add(new Grass(1325, 325, 50, 50));
+        selectable.add(new Farm(1325, 325));
+        selectable.add(new Grass(1325, 400, 50, 50));
 
         lvl.addObject(selectable.poll(), 1325, 25);
         lvl.addObject(selectable.poll(), 1325, 100);
         lvl.addObject(selectable.poll(), 1325, 175);
         lvl.addObject(selectable.poll(), 1325, 250);
         lvl.addObject(selectable.poll(), 1325, 325);
+        lvl.addObject(selectable.poll(), 1325, 400);
     }
 
     public void act() {
@@ -88,6 +90,11 @@ public class BuildingHandler extends Actor {
                 else if (a instanceof WindTurbine)
                 {
                     Cell b = new WindTurbine(Mayflower.getMouseInfo().getX(), Mayflower.getMouseInfo().getY());
+                    setSelected(b);
+                }
+                else if (a instanceof Farm)
+                {
+                    Cell b = new Farm(Mayflower.getMouseInfo().getX(), Mayflower.getMouseInfo().getY());
                     setSelected(b);
                 }
             }
@@ -167,6 +174,10 @@ public class BuildingHandler extends Actor {
         {
             selected = new WindTurbine(Mayflower.getMouseInfo().getX(), Mayflower.getMouseInfo().getY());
         }
+        else if (selected instanceof Farm)
+        {
+            selected = new Farm(Mayflower.getMouseInfo().getX(), Mayflower.getMouseInfo().getY());
+        }
     }
 
     public void SelectedInfo()
@@ -189,6 +200,11 @@ public class BuildingHandler extends Actor {
         else if (selected instanceof WindTurbine)
         {
             getWorld().showText("Wind turbine", 15, 1325, 500, Color.BLACK);
+            getWorld().showText("Cost: 5", 15, 1325, 525, Color.BLACK);
+        }
+        else if (selected instanceof Farm)
+        {
+            getWorld().showText("Farm", 15, 1325, 500, Color.BLACK);
             getWorld().showText("Cost: 5", 15, 1325, 525, Color.BLACK);
         }
     }
