@@ -1,6 +1,5 @@
 import mayflower.*;
 
-
 public class Factory extends Building
 {
     boolean active;
@@ -25,7 +24,9 @@ public class Factory extends Building
             active = true;
             setImage("img/factory 1-active.png");
             getWorld().showText("Factory", 15, 1325, 600, Color.BLACK);
-            getWorld().showText(" ", 15, 1325, 625, Color.BLACK);
+            getWorld().showText(" ", 15, 1320, 620, Color.BLACK);
+            getWorld().showText(" ", 15, 1305, 640, Color.BLACK);
+            getWorld().showText(" ", 15, 1325, 640, Color.BLACK);
         }
         else if(active)
         {
@@ -38,5 +39,4 @@ public class Factory extends Building
     {
         return "3";
     }
-
 }

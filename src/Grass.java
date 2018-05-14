@@ -20,7 +20,8 @@ public class Grass extends Cell {
             active = true;
             setImage("img/grass-active.png");
             getWorld().showText("Grass", 15, 1325, 600, Color.BLACK);
-            getWorld().showText(" ", 15, 1325, 625, Color.BLACK);
+            getWorld().showText(" ", 15, 1320, 620, Color.BLACK);
+            getWorld().showText(" ", 15, 1305, 640, Color.BLACK);
         }
         else if(active)
         {
@@ -43,9 +44,8 @@ public class Grass extends Cell {
 
     public String toString()
     {
-        if(!available)
-            return "0";
-
-        return "-1";
+        if(available)
+            return "-1";
+        return "0";
     }
 }

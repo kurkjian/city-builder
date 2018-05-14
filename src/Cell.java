@@ -27,11 +27,11 @@ public class Cell extends Actor
 
     }
 
-    public int getX(){
+    public int getx(){
         return x;
     }
 
-    public int getY(){
+    public int gety(){
         return y;
     }
 

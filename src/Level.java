@@ -11,7 +11,9 @@ public class Level extends World {
     int population;
     int power;
     double money;
+    int jobs;
     Timer timer;
+    boolean gameOver;
 
     public Level() {
         map = new CellMap(26,16);
@@ -30,6 +32,9 @@ public class Level extends World {
         population = 0;
         power = 0;
         money = 500;
+        jobs = 0;
+
+        gameOver = false;
 
         bh = new BuildingHandler(this);
         addObject(bh,0,0);
@@ -51,6 +56,9 @@ public class Level extends World {
         population = 0;
         power = 0;
         money = 500;
+        jobs = 0;
+
+        gameOver = false;
 
         bh = new BuildingHandler(this);
         addObject(bh,0,0);
@@ -58,25 +66,21 @@ public class Level extends World {
 
     public void act()
     {
-        if(bh.updateMap() != null)
-            map = bh.updateMap();
-        updateInfo();
-        printInfo();
-        if (timer.isDone())
-        {
-            taxes();
-            timer.reset();
-        }
-
-        /*MouseInfo mouse = Mayflower.getMouseInfo();
-        if(mouse.getX() < 25)
-        {
-            List<Actor> actors = getObjects();
-            for(Actor a : actors)
-            {
-                a.setLocation(a.getX() + 10, a.getY());
+        if (gameOver == false) {
+            if (bh.updateMap() != null)
+                map = bh.updateMap();
+            updateInfo();
+            printInfo();
+            if (timer.isDone()) {
+                taxes();
+                timer.reset();
             }
-        }*/
+            isGameOver();
+        }
+        else
+        {
+            addObject(new GameOver(), 0, 0);
+        }
 
     }
 
@@ -114,33 +118,110 @@ public class Level extends World {
         money = n;
     }
 
+    public void isGameOver()
+    {
+        if (money < -20000)
+        {
+            gameOver = true;
+        }
+    }
+
     public void updateInfo()
     {
         int pop = 0;
         int fo = 0;
         int pow = 0;
-        for (int r = 0; r < map.rows(); r++)
+        int jo = 0;
+        for (int row = 0; row < map.rows(); row++) {
+            for (int col = 0; col < map.cols(); col++) {
+                if (map.getCell(row, col) instanceof Factory) {
+                    jo = jo + 16;
+                    pow = pow - 2;
+                }
+            }
+        }
+        for (int row = 0; row < map.rows(); row++)
         {
-            for (int c = 0; c < map.cols(); c++)
+            for (int col = 0; col < map.cols(); col++)
             {
-                if (map.getCell(r, c) instanceof House)
+                if (map.getCell(row, col) instanceof WindTurbine)
                 {
-                    House h = (House) map.getCell(r, c);
+                    pow = pow + 10;
+                }
+            }
+        }
+        for (int row = 0; row < map.rows(); row++)
+        {
+            for (int col = 0; col < map.cols(); col++)
+            {
+                if (map.getCell(row, col) instanceof Farm)
+                {
+                    fo = fo + 32;
+                }
+            }
+        }
+        for (int row = 0; row < map.rows(); row++)
+        {
+            for (int col = 0; col < map.cols(); col++)
+            {
+                if (map.getCell(row, col) instanceof House)
+                {
+                    House h = (House) map.getCell(row, col);
                     pop = pop + h.getPeople();
+                    jo = jo - h.getPeople();
+                    pow = pow - 1;
+                    fo = fo - (1 * h.getPeople());
+                    if (jo >= 0 && pow >= 0 && fo >= 0) {
+                        h.setWorking(true);
+                        map.setCell(row, col, h);
+                    } else {
+                        h.setWorking(false);
+                        map.setCell(row, col, h);
+                    }
+                }
+            }
+        }
+        for (int row = 0; row < map.rows(); row++)
+        {
+            for (int col = 0; col < map.cols(); col++)
+            {
+                if (map.getCell(row, col) instanceof Road)
+                {
+                    Road a = (Road) map.getCell(row, col);
+                    for (int i = 0; i < 12; i++) {
+                        Cell c;
+
+                        if (i < 3) {
+                            c = map.getCell(a.getX() / 50, a.getY() / 50 - i - 1);
+                        } else if (i < 6) {
+                            c = map.getCell(a.getX() / 50, a.getY() / 50 + i + 1 - 3);
+                        } else if (i < 9) {
+                            c = map.getCell(a.getX() / 50 - 1 - i + 6, a.getY() / 50);
+                        } else {
+                            c = map.getCell(a.getX() / 50 + 1 + i - 9, a.getY() / 50);
+                        }
+
+                        if (c instanceof Grass) {
+                            Grass g = (Grass) c;
+                            g.setAvailable();
+                        }
+                    }
                 }
             }
         }
         population = pop;
         food = fo;
         power = pow;
+        jobs = jo;
     }
 
     public void printInfo()
     {
         showText("Money: " + money, 12, 1305, 675, Color.BLACK);
         showText("Population: " + population, 12, 1305, 700, Color.BLACK);
-        showText("Food: " + food, 12, 1305, 725, Color.BLACK);
-        showText("Power: " + power, 12, 1305, 750, Color.BLACK);
+        showText("Open Jobs: " + jobs, 12, 1305, 725, Color.BLACK);
+        showText("Food: " + food, 12, 1305, 750, Color.BLACK);
+        showText("Power: " + power, 12, 1305, 775, Color.BLACK);
     }
 
     public void taxes()
@@ -152,7 +233,17 @@ public class Level extends World {
                 if (map.getCell(r, c) instanceof House)
                 {
                     House h = (House) map.getCell(r, c);
-                    setMoney(getMoney() + h.taxReturn());
+                    if (h.isWorking()) {
+                        setMoney(getMoney() + h.taxReturn());
+                    }
+                    else
+                    {
+                        setMoney(getMoney() - h.taxReturn());
+                    }
+                }
+                if (map.getCell(r, c) instanceof Factory)
+                {
+                    setMoney(getMoney() - 5);
                 }
             }
         }
