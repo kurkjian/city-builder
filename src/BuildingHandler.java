@@ -52,6 +52,10 @@ public class BuildingHandler extends Actor {
     }
 
     public void act() {
+
+        if(Mayflower.isKeyPressed(Keyboard.KEY_SPACE))
+            System.out.println(mapHist);
+
         if(!hasMap)
         {
             getMap();
@@ -65,9 +69,13 @@ public class BuildingHandler extends Actor {
         {
             mapHist.removeElementAt(0);
         }
+        if(mapHist.isEmpty())
+        {
+            mapHist.push(new CellMap(0));
+        }
+
         if(Mayflower.isKeyPressed(Keyboard.KEY_Z) && mapHist.size() > 0)
         {
-            System.out.println(mapHist);
             renderMap();
         }
 
@@ -248,8 +256,11 @@ public class BuildingHandler extends Actor {
         {
             for(int j = 0; j < map.cols(); j++)
             {
+                Cell newCell = newMap.getCell(i,j);
+                if(newCell instanceof Grass)
+                    newCell.setRotation(curr.getCell(i,j).getRotation());
                 getWorld().removeObject(curr.getCell(i,j));
-                getWorld().addObject(newMap.getCell(i,j), i * 50, j * 50);
+                getWorld().addObject(newCell, i * 50, j * 50);
             }
         }
 
