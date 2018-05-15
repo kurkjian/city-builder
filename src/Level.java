@@ -31,7 +31,7 @@ public class Level extends World {
         food = 0;
         population = 0;
         power = 0;
-        money = 500;
+        money = 2000;
         jobs = 0;
 
         gameOver = false;
