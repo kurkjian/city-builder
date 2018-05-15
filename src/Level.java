@@ -109,6 +109,18 @@ public class Level extends World {
         int jo = 0;
         for (int row = 0; row < map.rows(); row++) {
             for (int col = 0; col < map.cols(); col++) {
+                if (map.getCell(row, col) instanceof Grass) {
+                    Grass g = (Grass) map.getCell(row, col);
+                    if (g.isAvailable()) {
+                        g.setUnavailable();
+                        map.setCell(row, col, g);
+                    }
+                }
+            }
+        }
+
+        for (int row = 0; row < map.rows(); row++) {
+            for (int col = 0; col < map.cols(); col++) {
                 if (map.getCell(row, col) instanceof Factory) {
                     jo = jo + 16;
                     pow = pow - 2;

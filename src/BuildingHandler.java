@@ -101,38 +101,35 @@ public class BuildingHandler extends Actor {
             SelectedInfo();
         }
 
-        refreshSelected();
-
         if(building)
         {
             List<Actor> atMouse = Mayflower.mouseClicked();
             for(Actor a : atMouse)
             {
-                if (a instanceof Grass && selected instanceof Road && a.getX() <= 1300)
+                if (!(a instanceof BuildingHandler))
                 {
-                    getWorld().addObject(selected, a.getX(), a.getY());
-                    map.setCell(Mayflower.getMouseInfo().getX()/50, Mayflower.getMouseInfo().getY()/50, selected);
-                    getWorld().removeObject(a);
-                    Road r = (Road) selected;
-                    l.setMoney(l.getMoney() - r.getCost());
-                }
-                else if(a instanceof Grass && a.getX() <= 1300 && !(selected instanceof Grass))
-                {
-                    Grass g = (Grass) a;
-                    if (g.isAvailable()){
+                    refreshSelected(a);
+                    if (a instanceof Grass && selected instanceof Road && a.getX() <= 1300) {
                         getWorld().addObject(selected, a.getX(), a.getY());
-                        map.setCell(Mayflower.getMouseInfo().getX()/50, Mayflower.getMouseInfo().getY()/50, selected);
+                        map.setCell(Mayflower.getMouseInfo().getX() / 50, Mayflower.getMouseInfo().getY() / 50, selected);
                         getWorld().removeObject(a);
-                        Building b = (Building) selected;
-                        l.setMoney(l.getMoney() - b.getCost());
+                        Road r = (Road) selected;
+                        l.setMoney(l.getMoney() - r.getCost());
+                    } else if (a instanceof Grass && a.getX() <= 1300 && !(selected instanceof Grass)) {
+                        Grass g = (Grass) a;
+                        if (g.isAvailable()) {
+                            getWorld().addObject(selected, a.getX(), a.getY());
+                            map.setCell(Mayflower.getMouseInfo().getX() / 50, Mayflower.getMouseInfo().getY() / 50, selected);
+                            getWorld().removeObject(a);
+                            Building b = (Building) selected;
+                            l.setMoney(l.getMoney() - b.getCost());
+                        }
+                    } else if (selected instanceof Grass && a.getX() <= 1300) {
+                        getWorld().addObject(selected, a.getX(), a.getY());
+                        map.setCell(Mayflower.getMouseInfo().getX() / 50, Mayflower.getMouseInfo().getY() / 50, selected);
+                        getWorld().removeObject(a);
+                        l.setMoney(l.getMoney() - 3);
                     }
-                }
-                else if (selected instanceof Grass && a.getX() <= 1300)
-                {
-                    getWorld().addObject(selected, a.getX(), a.getY());
-                    map.setCell(Mayflower.getMouseInfo().getX()/50, Mayflower.getMouseInfo().getY()/50, selected);
-                    getWorld().removeObject(a);
-
                 }
             }
         }
@@ -152,31 +149,31 @@ public class BuildingHandler extends Actor {
         selected = c;
     }
 
-    public void refreshSelected()
+    public void refreshSelected(Actor a)
     {
         if (selected instanceof Road)
         {
-            selected = new Road(Mayflower.getMouseInfo().getX(), Mayflower.getMouseInfo().getY(), 50, 50);
+            selected = new Road(a.getX(), a.getY(), 50, 50);
         }
         else if (selected instanceof House)
         {
-            selected = new House(Mayflower.getMouseInfo().getX(), Mayflower.getMouseInfo().getY());
+            selected = new House(a.getX(), a.getY());
         }
         else if (selected instanceof Factory)
         {
-            selected = new Factory(Mayflower.getMouseInfo().getX(), Mayflower.getMouseInfo().getY());
+            selected = new Factory(a.getX(), a.getY());
         }
         else if (selected instanceof Grass)
         {
-            selected = new Grass(Mayflower.getMouseInfo().getX(), Mayflower.getMouseInfo().getY(), 50, 50);
+            selected = new Grass(a.getX(), a.getY(), 50, 50);
         }
         else if (selected instanceof WindTurbine)
         {
-            selected = new WindTurbine(Mayflower.getMouseInfo().getX(), Mayflower.getMouseInfo().getY());
+            selected = new WindTurbine(a.getX(), a.getY());
         }
         else if (selected instanceof Farm)
         {
-            selected = new Farm(Mayflower.getMouseInfo().getX(), Mayflower.getMouseInfo().getY());
+            selected = new Farm(a.getX(), a.getY());
         }
     }
 
@@ -206,6 +203,11 @@ public class BuildingHandler extends Actor {
         {
             getWorld().showText("Farm", 15, 1325, 500, Color.BLACK);
             getWorld().showText("Cost: 5", 15, 1325, 525, Color.BLACK);
+        }
+        else if (selected instanceof Grass)
+        {
+            getWorld().showText("Grass", 15, 1325, 500, Color.BLACK);
+            getWorld().showText("Cost: 3", 15, 1325, 525, Color.BLACK);
         }
     }
 
