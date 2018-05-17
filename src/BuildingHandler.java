@@ -265,6 +265,7 @@ public class BuildingHandler extends Actor {
         }
 
         map = newMap;
+        prevMap = map.copy();
     }
 
     public void compareMaps()
