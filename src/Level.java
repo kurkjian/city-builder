@@ -2,7 +2,6 @@ import mayflower.Color;
 import mayflower.World;
 import mayflower.*;
 
-
 public class Level extends World {
 
     private CellMap map;
@@ -63,10 +62,7 @@ public class Level extends World {
     {
         return population;
     }
-    public int getFood()
-    {
-        return food;
-    }
+    public int getFood() { return food; }
     public int getPower()
     {
         return power;
@@ -109,41 +105,25 @@ public class Level extends World {
         int jo = 0;
         for (int row = 0; row < map.rows(); row++) {
             for (int col = 0; col < map.cols(); col++) {
-                if (map.getCell(row, col) instanceof Grass) {
+                if (map.getCell(row, col) instanceof Factory) {
+
+                    jo = jo + 16;
+                    pow = pow - 2;
+                }
+                else if (map.getCell(row, col) instanceof WindTurbine)
+                {
+                    pow = pow + 10;
+                }
+                else if (map.getCell(row, col) instanceof Farm)
+                {
+                    fo = fo + 32;
+                }
+                else if (map.getCell(row, col) instanceof Grass) {
                     Grass g = (Grass) map.getCell(row, col);
                     if (g.isAvailable()) {
                         g.setUnavailable();
                         map.setCell(row, col, g);
                     }
-                }
-            }
-        }
-
-        for (int row = 0; row < map.rows(); row++) {
-            for (int col = 0; col < map.cols(); col++) {
-                if (map.getCell(row, col) instanceof Factory) {
-                    jo = jo + 16;
-                    pow = pow - 2;
-                }
-            }
-        }
-        for (int row = 0; row < map.rows(); row++)
-        {
-            for (int col = 0; col < map.cols(); col++)
-            {
-                if (map.getCell(row, col) instanceof WindTurbine)
-                {
-                    pow = pow + 10;
-                }
-            }
-        }
-        for (int row = 0; row < map.rows(); row++)
-        {
-            for (int col = 0; col < map.cols(); col++)
-            {
-                if (map.getCell(row, col) instanceof Farm)
-                {
-                    fo = fo + 32;
                 }
             }
         }
@@ -166,13 +146,7 @@ public class Level extends World {
                         map.setCell(row, col, h);
                     }
                 }
-            }
-        }
-        for (int row = 0; row < map.rows(); row++)
-        {
-            for (int col = 0; col < map.cols(); col++)
-            {
-                if (map.getCell(row, col) instanceof Road)
+                else if (map.getCell(row, col) instanceof Road)
                 {
                     Road a = (Road) map.getCell(row, col);
                     for (int i = 0; i < 12; i++) {

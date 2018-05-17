@@ -4,16 +4,13 @@ import java.awt.Graphics;
 
 public class Cell extends Actor
 {
-
     private int x;
     private int y;
     private int width;
     private int height;
     private Image image;
 
-    public Cell()
-    {
-
+    public Cell() {
     }
 
     public Cell(int a, int b, int w, int h) {
@@ -23,9 +20,7 @@ public class Cell extends Actor
         height = h;
     }
 
-    public void act()
-    {
-
+    public void act(){
     }
 
     public int getX(){
@@ -34,9 +29,5 @@ public class Cell extends Actor
 
     public int getY(){
         return y;
-    }
-
-    public void draw(Graphics window){
-        window.drawImage(image, x, y, width, height, null);
     }
 }
