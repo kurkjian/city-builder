@@ -146,6 +146,17 @@ public class BuildingHandler extends Actor {
                     Road r = (Road) selected;
                     l.setMoney(l.getMoney() - r.getCost());
 
+                    r = (Road)(map.getCell(Mayflower.getMouseInfo().getX()/50, Mayflower.getMouseInfo().getY()/50));
+                    r.updateImage();
+
+                    List<Cell> roads = r.getNeighbors(l, r.getx(), r.gety());
+                    for(int i = 0; i < roads.size(); i++)
+                    {
+                        if(roads.get(i) instanceof Road)
+                        {
+                            ((Road) roads.get(i)).updateImage();
+                        }
+                    }
                 }
                 else if(a instanceof Grass && a.getX() <= 1300 && !(selected instanceof Grass))
                 {
@@ -156,6 +167,7 @@ public class BuildingHandler extends Actor {
                         getWorld().removeObject(a);
                         Building b = (Building) selected;
                         l.setMoney(l.getMoney() - b.getCost());
+
                     }
                 }
                 else if (selectable != null && a != null && selected instanceof Grass && a.getX() <= 1300)
@@ -179,7 +191,7 @@ public class BuildingHandler extends Actor {
     {
         if (selected instanceof Road)
         {
-            selected = new Road(Mayflower.getMouseInfo().getX(), Mayflower.getMouseInfo().getY(), 50, 50);
+            selected = new Road(Mayflower.getMouseInfo().getX() / 50, Mayflower.getMouseInfo().getY() / 50, 50, 50);
         }
         else if (selected instanceof House)
         {
