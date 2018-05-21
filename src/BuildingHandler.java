@@ -48,7 +48,7 @@ public class BuildingHandler extends Actor {
 
         save = (Save) selectable.poll();
 
-        lvl.addObject(save, 1325, 500);
+        lvl.addObject(save, 1337, 540);
     }
 
     public void act() {
@@ -65,7 +65,7 @@ public class BuildingHandler extends Actor {
         }
 
 
-        if(mapHist.size() > 50)
+        if(mapHist.size() > 5)
         {
             mapHist.removeElementAt(0);
         }

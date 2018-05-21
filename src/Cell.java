@@ -45,7 +45,7 @@ public class Cell extends Actor
         Cell[][] map = level.getMap().getMap();
         List<Cell> ret = new ArrayList<>();
 
-        if(x - 1 > 0)
+        if(x - 1 > -1)
         {
             ret.add(map[x-1][y]);
         }
@@ -53,7 +53,7 @@ public class Cell extends Actor
         {
             ret.add(map[x+1][y]);
         }
-        if(y - 1 > 0)
+        if(y - 1 > -1)
         {
             ret.add(map[x][y-1]);
         }

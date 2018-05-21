@@ -92,15 +92,6 @@ public class Road extends Cell {
         if(left != null)
             count++;
 
-        switch (count)
-        {
-            case 1: setImage("img/road-straight.png"); break;
-            case 2: setImage("img/road-corner.png"); break;
-            case 3: setImage("img/road-t.png"); break;
-            case 4: setImage("img/road-quad.png"); break;
-            default: setImage("img/road.png"); break;
-        }
-
         if(count <= 1)
         {
             setImage("img/road-straight.png");
@@ -155,14 +146,22 @@ public class Road extends Cell {
             {
                 setRotation(180);
             }
-            else if(top != null && left != null && left != null)
+            else if(top != null && bottom != null && right != null)
+            {
+                setRotation(0);
+            }
+            else if(top != null && left != null && right != null)
             {
                 setRotation(270);
             }
-            else if(bottom != null && left != null && left != null)
+            else if(bottom != null && left != null && right != null)
             {
                 setRotation(90);
             }
+        }
+        else
+        {
+            setImage("img/road-quad.png");
         }
 
     }
