@@ -36,10 +36,6 @@ public class Cell extends Actor
         return y;
     }
 
-    public void draw(Graphics window){
-        window.drawImage(image, x, y, width, height, null);
-    }
-
     public List<Cell> getNeighbors(Level level, int x, int y)
     {
         Cell[][] map = level.getMap().getMap();

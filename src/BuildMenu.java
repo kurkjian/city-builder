@@ -9,7 +9,7 @@ public class BuildMenu extends Actor {
         super();
         x = a;
         y = b;
-        setImage("img/build menu.png");
+        setImage("resources/build menu.png");
     }
 
     public void act()

@@ -13,7 +13,7 @@ public class Road extends Cell {
 
     public Road(int x, int y, int w, int h) {
         super(x,y, w, h);
-        setImage("img/road.png");
+        setImage("resources/road.png");
         active = false;
         cost = 1;
 
@@ -27,7 +27,7 @@ public class Road extends Cell {
         if(Mayflower.mouseHovered(this))
         {
             active = true;
-//            setImage("img/road-active.png");
+//            setImage("resources/road-active.png");
             getWorld().showText("Road", 15, 1325, 600, Color.BLACK);
             getWorld().showText(" ", 15, 1320, 620, Color.BLACK);
             getWorld().showText(" ", 15, 1305, 640, Color.BLACK);
@@ -35,7 +35,7 @@ public class Road extends Cell {
         else if(active)
         {
             active = false;
-//            setImage("img/road.png");
+//            setImage("resources/road.png");
         }
     }
 
@@ -94,7 +94,7 @@ public class Road extends Cell {
 
         if(count <= 1)
         {
-            setImage("img/road-straight.png");
+            setImage("resources/road-straight.png");
 
             if(count == 1)
             {
@@ -108,7 +108,7 @@ public class Road extends Cell {
         }
         else if(count == 2)
         {
-            setImage("img/road-corner.png");
+            setImage("resources/road-corner.png");
 
             if(top != null && right != null)
             {
@@ -129,18 +129,18 @@ public class Road extends Cell {
 
             if(top != null && bottom != null)
             {
-                setImage("img/road-straight.png");
+                setImage("resources/road-straight.png");
                 setRotation(0);
             }
             else if(right != null && left != null)
             {
-                setImage("img/road-straight.png");
+                setImage("resources/road-straight.png");
                 setRotation(90);
             }
         }
         else if(count == 3)
         {
-            setImage("img/road-t.png");
+            setImage("resources/road-t.png");
 
             if(top != null && bottom != null && left != null)
             {
@@ -161,7 +161,7 @@ public class Road extends Cell {
         }
         else
         {
-            setImage("img/road-quad.png");
+            setImage("resources/road-quad.png");
         }
 
     }

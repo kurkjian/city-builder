@@ -7,7 +7,7 @@ public class Grass extends Cell {
 
     public Grass(int x, int y, int w, int h){
         super(x,y,w,h);
-        setImage("img/grass.png");
+        setImage("resources/grass.png");
         setRotation((int)(Math.random()*4)*90);
         active = false;
         Mayflower.setMouseOffset(0,0);
@@ -18,7 +18,7 @@ public class Grass extends Cell {
         if(Mayflower.mouseHovered(this))
         {
             active = true;
-            setImage("img/grass-active.png");
+            setImage("resources/grass-active.png");
             getWorld().showText("Grass", 15, 1325, 600, Color.BLACK);
             getWorld().showText(" ", 15, 1320, 620, Color.BLACK);
             getWorld().showText(" ", 15, 1305, 640, Color.BLACK);
@@ -27,15 +27,20 @@ public class Grass extends Cell {
         {
             active = false;
             if(available)
-                setImage("img/grass-open.png");
+                setImage("resources/grass-open.png");
             else
-                setImage("img/grass.png");
+                setImage("resources/grass.png");
         }
     }
 
     public void setAvailable() {
         available = true;
-        setImage("img/grass-open.png");
+        setImage("resources/grass-open.png");
+    }
+
+    public void setUnavailable() {
+        available = false;
+        setImage("resources/grass.png");
     }
 
     public boolean isAvailable(){

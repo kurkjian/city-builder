@@ -106,6 +106,14 @@ public class CellMap {
                 {
                     ret.setCell(i,j,new Factory(i,j));
                 }
+                else if( test instanceof WindTurbine)
+                {
+                    ret.setCell(i,j,new WindTurbine(i,j));
+                }
+                else if( test instanceof Farm)
+                {
+                    ret.setCell(i,j,new Farm(i,j));
+                }
 
 
 //                ret.setCell(i,j,map[i][j]);

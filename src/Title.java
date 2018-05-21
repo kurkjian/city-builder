@@ -9,15 +9,15 @@ public class Title extends World {
     Button load;
 
     public Title() throws Exception {
-        setBackground("img/title.png");
+        setBackground("resources/title.png");
         showText("City Builder v0.1", 48,500,150);
-        play = new Button("img/play.png");
+        play = new Button("resources/play.png");
         addObject(play,500,450);
 
         save = new File("save.txt");
         if(save.exists())
         {
-            load = new Button("img/load.png");
+            load = new Button("resources/load.png");
             addObject(load, 500, 600);
         }
     }
@@ -67,6 +67,10 @@ public class Title extends World {
             return new House(1,1);
         if(id == 3)
             return new Factory(i,j);
+        if(id == 4)
+            return new WindTurbine(i,j);
+        if(id == 5)
+            return new Farm(i,j);
 
         if(id == -1)
         {

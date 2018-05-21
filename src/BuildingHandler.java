@@ -18,7 +18,7 @@ public class BuildingHandler extends Actor {
     Level l;
 
     public BuildingHandler(Level lvl) {
-        setImage("img/bh.png");
+        setImage("resources/bh.png");
 
         building = false;
         hasMap = false;
@@ -52,9 +52,6 @@ public class BuildingHandler extends Actor {
     }
 
     public void act() {
-
-        if(Mayflower.isKeyPressed(Keyboard.KEY_SPACE))
-            System.out.println(mapHist);
 
         if(!hasMap)
         {
@@ -118,12 +115,12 @@ public class BuildingHandler extends Actor {
                 }
                 else if (a instanceof WindTurbine)
                 {
-                    Cell b = new WindTurbine(Mayflower.getMouseInfo().getX(), Mayflower.getMouseInfo().getY());
+                    Cell b = new WindTurbine(Mayflower.getMouseInfo().getX()/50, Mayflower.getMouseInfo().getY()/50);
                     setSelected(b);
                 }
                 else if (a instanceof Farm)
                 {
-                    Cell b = new Farm(Mayflower.getMouseInfo().getX(), Mayflower.getMouseInfo().getY());
+                    Cell b = new Farm(Mayflower.getMouseInfo().getX()/50, Mayflower.getMouseInfo().getY()/50);
                     setSelected(b);
                 }
             }
@@ -138,15 +135,17 @@ public class BuildingHandler extends Actor {
             List<Actor> atMouse = Mayflower.mouseClicked();
             for(Actor a : atMouse)
             {
+                int x = Mayflower.getMouseInfo().getX() / 50;
+                int y = Mayflower.getMouseInfo().getY() / 50;
                 if (a instanceof Grass && selected instanceof Road && a.getX() <= 1300)
                 {
                     getWorld().addObject(selected, a.getX(), a.getY());
-                    map.setCell(Mayflower.getMouseInfo().getX()/50, Mayflower.getMouseInfo().getY()/50, selected);
+                    map.setCell(x, y, selected);
                     getWorld().removeObject(a);
                     Road r = (Road) selected;
                     l.setMoney(l.getMoney() - r.getCost());
 
-                    r = (Road)(map.getCell(Mayflower.getMouseInfo().getX()/50, Mayflower.getMouseInfo().getY()/50));
+                    r = (Road)(map.getCell(x, y));
                     r.updateImage();
 
                     List<Cell> roads = r.getNeighbors(l, r.getx(), r.gety());
@@ -163,7 +162,7 @@ public class BuildingHandler extends Actor {
                     Grass g = (Grass) a;
                     if (g.isAvailable()){
                         getWorld().addObject(selected, a.getX(), a.getY());
-                        map.setCell(Mayflower.getMouseInfo().getX()/50, Mayflower.getMouseInfo().getY()/50, selected);
+                        map.setCell(x, y, selected);
                         getWorld().removeObject(a);
                         Building b = (Building) selected;
                         l.setMoney(l.getMoney() - b.getCost());
@@ -173,7 +172,7 @@ public class BuildingHandler extends Actor {
                 else if (selectable != null && a != null && selected instanceof Grass && a.getX() <= 1300)
                 {
                     getWorld().addObject(selected, a.getX(), a.getY());
-                    map.setCell(Mayflower.getMouseInfo().getX()/50, Mayflower.getMouseInfo().getY()/50, selected);
+                    map.setCell(x, y, selected);
                     getWorld().removeObject(a);
                 }
             }
@@ -195,23 +194,23 @@ public class BuildingHandler extends Actor {
         }
         else if (selected instanceof House)
         {
-            selected = new House(Mayflower.getMouseInfo().getX(), Mayflower.getMouseInfo().getY());
+            selected = new House(Mayflower.getMouseInfo().getX()/ 50, Mayflower.getMouseInfo().getY()/ 50);
         }
         else if (selected instanceof Factory)
         {
-            selected = new Factory(Mayflower.getMouseInfo().getX(), Mayflower.getMouseInfo().getY());
+            selected = new Factory(Mayflower.getMouseInfo().getX()/ 50, Mayflower.getMouseInfo().getY()/ 50);
         }
         else if (selected instanceof Grass)
         {
-            selected = new Grass(Mayflower.getMouseInfo().getX(), Mayflower.getMouseInfo().getY(), 50, 50);
+            selected = new Grass(Mayflower.getMouseInfo().getX()/ 50, Mayflower.getMouseInfo().getY()/ 50, 50, 50);
         }
         else if (selected instanceof WindTurbine)
         {
-            selected = new WindTurbine(Mayflower.getMouseInfo().getX(), Mayflower.getMouseInfo().getY());
+            selected = new WindTurbine(Mayflower.getMouseInfo().getX()/ 50, Mayflower.getMouseInfo().getY()/ 50);
         }
         else if (selected instanceof Farm)
         {
-            selected = new Farm(Mayflower.getMouseInfo().getX(), Mayflower.getMouseInfo().getY());
+            selected = new Farm(Mayflower.getMouseInfo().getX()/ 50, Mayflower.getMouseInfo().getY()/ 50);
         }
     }
 
@@ -269,10 +268,27 @@ public class BuildingHandler extends Actor {
             for(int j = 0; j < map.cols(); j++)
             {
                 Cell newCell = newMap.getCell(i,j);
+                Cell currCell = map.getCell(i,j);
+
                 if(newCell instanceof Grass)
                     newCell.setRotation(curr.getCell(i,j).getRotation());
-                getWorld().removeObject(curr.getCell(i,j));
-                getWorld().addObject(newCell, i * 50, j * 50);
+
+                if(!currCell.getClass().equals(newCell.getClass()))
+                {
+                    getWorld().removeObject(curr.getCell(i,j));
+                    getWorld().addObject(newCell, i * 50, j * 50);
+                }
+                else
+                {
+                    if(currCell instanceof Grass)
+                    {
+                        if(((Grass) currCell).isAvailable() != ((Grass) newCell).isAvailable())
+                        {
+                            getWorld().removeObject(curr.getCell(i,j));
+                            getWorld().addObject(newCell, i * 50, j * 50);
+                        }
+                    }
+                }
             }
         }
 

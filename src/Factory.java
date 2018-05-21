@@ -6,14 +6,14 @@ public class Factory extends Building
     public Factory()
     {
         super(2,1, 10);
-        setImage("img/Factory 1.png");
+        setImage("resources/Factory 1.png");
         active = false;
     }
 
     public Factory(int x, int y)
     {
         super(x,y, 10);
-        setImage("img/Factory 1.png");
+        setImage("resources/Factory 1.png");
         active = false;
     }
 
@@ -22,7 +22,7 @@ public class Factory extends Building
         if(Mayflower.mouseHovered(this))
         {
             active = true;
-            setImage("img/factory 1-active.png");
+            setImage("resources/factory 1-active.png");
             getWorld().showText("Factory", 15, 1325, 600, Color.BLACK);
             getWorld().showText(" ", 15, 1320, 620, Color.BLACK);
             getWorld().showText(" ", 15, 1305, 640, Color.BLACK);
@@ -31,7 +31,7 @@ public class Factory extends Building
         else if(active)
         {
             active = false;
-            setImage("img/factory 1.png");
+            setImage("resources/factory 1.png");
         }
     }
 

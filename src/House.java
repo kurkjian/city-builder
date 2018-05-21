@@ -11,7 +11,7 @@ public class House extends Building
     {
         super(1,1, 5);
 
-        setImage("img/House.png");
+        setImage("resources/House.png");
         peopleInHouse=1;
         timer = new Timer(999999999);
         active = false;
@@ -21,7 +21,7 @@ public class House extends Building
     public House(int x, int y)
     {
         super(x, y, 5);
-        setImage("img/House.png");
+        setImage("resources/House.png");
         peopleInHouse=1;
         timer = new Timer(999999999);
         active = false;
@@ -32,7 +32,7 @@ public class House extends Building
         if(Mayflower.mouseHovered(this))
         {
             active = true;
-            setImage("img/house-active.png");
+            setImage("resources/house-active.png");
             getWorld().showText("House", 15, 1325, 600, Color.BLACK);
             getWorld().showText("People: " + peopleInHouse, 15, 1320, 620, Color.BLACK);
             if (working)
@@ -49,7 +49,7 @@ public class House extends Building
         else if(active)
         {
             active = false;
-            setImage("img/house.png");
+            setImage("resources/house.png");
         }
         if(peopleInHouse<8)
         {

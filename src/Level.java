@@ -21,7 +21,7 @@ public class Level extends World {
         {
             for(int j = 0; j < map.cols(); j++)
             {
-                Grass g = new Grass(i*50,j*50,50,50);
+                Grass g = new Grass(i,j,50,50);
                 addObject(g,i*50,j*50);
                 map.setCell(i,j,g);
             }
@@ -66,13 +66,12 @@ public class Level extends World {
 
     public void act()
     {
-        if (gameOver == false) {
+        if (!gameOver) {
             if (bh.updateMap() != null)
                 map = bh.updateMap();
-            updateInfo();
             printInfo();
             if (timer.isDone()) {
-                taxes();
+                updateInfo();
                 timer.reset();
             }
             isGameOver();
@@ -135,35 +134,27 @@ public class Level extends World {
         for (int row = 0; row < map.rows(); row++) {
             for (int col = 0; col < map.cols(); col++) {
                 if (map.getCell(row, col) instanceof Factory) {
+
                     jo = jo + 16;
                     pow = pow - 2;
+                    setMoney(getMoney() - 5);
                 }
-            }
-        }
-        for (int row = 0; row < map.rows(); row++)
-        {
-            for (int col = 0; col < map.cols(); col++)
-            {
-                if (map.getCell(row, col) instanceof WindTurbine)
+                else if (map.getCell(row, col) instanceof WindTurbine)
                 {
                     pow = pow + 10;
                 }
-            }
-        }
-        for (int row = 0; row < map.rows(); row++)
-        {
-            for (int col = 0; col < map.cols(); col++)
-            {
-                if (map.getCell(row, col) instanceof Farm)
+                else if (map.getCell(row, col) instanceof Farm)
                 {
                     fo = fo + 32;
                 }
-            }
-        }
-        for (int row = 0; row < map.rows(); row++)
-        {
-            for (int col = 0; col < map.cols(); col++)
-            {
+                else if (map.getCell(row, col) instanceof Grass) {
+                    Grass g = (Grass) map.getCell(row, col);
+                    if (g.isAvailable()) {
+                        g.setUnavailable();
+                        map.setCell(row, col, g);
+                    }
+                }
+
                 if (map.getCell(row, col) instanceof House)
                 {
                     House h = (House) map.getCell(row, col);
@@ -178,27 +169,30 @@ public class Level extends World {
                         h.setWorking(false);
                         map.setCell(row, col, h);
                     }
+                    if (h.isWorking()) {
+                        setMoney(getMoney() + h.taxReturn());
+                    }
+                    else
+                    {
+                        setMoney(getMoney() - h.taxReturn());
+                    }
                 }
-            }
-        }
-        for (int row = 0; row < map.rows(); row++)
-        {
-            for (int col = 0; col < map.cols(); col++)
-            {
-                if (map.getCell(row, col) instanceof Road)
+                else if (map.getCell(row, col) instanceof Road)
                 {
                     Road a = (Road) map.getCell(row, col);
+                    int x = a.getX() / 50;
+                    int y = a.getY() / 50;
                     for (int i = 0; i < 12; i++) {
                         Cell c;
 
                         if (i < 3) {
-                            c = map.getCell(a.getX() / 50, a.getY() / 50 - i - 1);
+                            c = map.getCell(x, y - i - 1);
                         } else if (i < 6) {
-                            c = map.getCell(a.getX() / 50, a.getY() / 50 + i + 1 - 3);
+                            c = map.getCell(x, y + i + 1 - 3);
                         } else if (i < 9) {
-                            c = map.getCell(a.getX() / 50 - 1 - i + 6, a.getY() / 50);
+                            c = map.getCell(x - 1 - i + 6, y);
                         } else {
-                            c = map.getCell(a.getX() / 50 + 1 + i - 9, a.getY() / 50);
+                            c = map.getCell(x + 1 + i - 9, y);
                         }
 
                         if (c instanceof Grass) {
@@ -209,6 +203,7 @@ public class Level extends World {
                 }
             }
         }
+
         population = pop;
         food = fo;
         power = pow;

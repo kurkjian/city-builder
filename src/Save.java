@@ -8,7 +8,7 @@ public class Save extends Cell {
 
     public Save(int x, int y, int w, int h) {
         super(x,y,w,h);
-        setImage("img/save-yes.png");
+        setImage("resources/save-yes.png");
         saved = true;
         this.scale(25,25);
     }
@@ -54,9 +54,9 @@ public class Save extends Cell {
     {
         saved = b;
         if(saved)
-            setImage("img/save-yes.png");
+            setImage("resources/save-yes.png");
         else
-            setImage("img/save-no.png");
+            setImage("resources/save-no.png");
 
         this.scale(25,25);
     }
