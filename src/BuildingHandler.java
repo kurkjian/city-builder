@@ -167,7 +167,6 @@ public class BuildingHandler extends Actor {
                         getWorld().removeObject(a);
                         Building b = (Building) selected;
                         l.setMoney(l.getMoney() - b.getCost());
-
                     }
                 }
                 else if (selectable != null && a != null && selected instanceof Grass && a.getX() <= 1300)
@@ -179,7 +178,6 @@ public class BuildingHandler extends Actor {
             }
             compareMaps();
         }
-
     }
 
     public void setSelected(Cell c)

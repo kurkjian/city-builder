@@ -69,10 +69,9 @@ public class Level extends World {
         if (gameOver == false) {
             if (bh.updateMap() != null)
                 map = bh.updateMap();
-            updateInfo();
             printInfo();
             if (timer.isDone()) {
-                taxes();
+                updateInfo();
                 timer.reset();
             }
             isGameOver();
@@ -135,28 +134,25 @@ public class Level extends World {
         for (int row = 0; row < map.rows(); row++) {
             for (int col = 0; col < map.cols(); col++) {
                 if (map.getCell(row, col) instanceof Factory) {
+
                     jo = jo + 16;
                     pow = pow - 2;
+                    setMoney(getMoney() - 5);
                 }
-            }
-        }
-        for (int row = 0; row < map.rows(); row++)
-        {
-            for (int col = 0; col < map.cols(); col++)
-            {
-                if (map.getCell(row, col) instanceof WindTurbine)
+                else if (map.getCell(row, col) instanceof WindTurbine)
                 {
                     pow = pow + 10;
                 }
-            }
-        }
-        for (int row = 0; row < map.rows(); row++)
-        {
-            for (int col = 0; col < map.cols(); col++)
-            {
-                if (map.getCell(row, col) instanceof Farm)
+                else if (map.getCell(row, col) instanceof Farm)
                 {
                     fo = fo + 32;
+                }
+                else if (map.getCell(row, col) instanceof Grass) {
+                    Grass g = (Grass) map.getCell(row, col);
+                    if (g.isAvailable()) {
+                        g.setUnavailable();
+                        map.setCell(row, col, g);
+                    }
                 }
             }
         }
@@ -178,14 +174,15 @@ public class Level extends World {
                         h.setWorking(false);
                         map.setCell(row, col, h);
                     }
+                    if (h.isWorking()) {
+                        setMoney(getMoney() + h.taxReturn());
+                    }
+                    else
+                    {
+                        setMoney(getMoney() - h.taxReturn());
+                    }
                 }
-            }
-        }
-        for (int row = 0; row < map.rows(); row++)
-        {
-            for (int col = 0; col < map.cols(); col++)
-            {
-                if (map.getCell(row, col) instanceof Road)
+                else if (map.getCell(row, col) instanceof Road)
                 {
                     Road a = (Road) map.getCell(row, col);
                     for (int i = 0; i < 12; i++) {
