@@ -2,6 +2,7 @@ import mayflower.Color;
 import mayflower.World;
 import mayflower.*;
 
+
 public class Level extends World {
 
     private CellMap map;
@@ -30,7 +31,31 @@ public class Level extends World {
         food = 0;
         population = 0;
         power = 0;
-        money = 2000;
+        money = 500;
+        jobs = 0;
+
+        gameOver = false;
+
+        bh = new BuildingHandler(this);
+        addObject(bh,0,0);
+    }
+
+    public Level(CellMap m) {
+        map = m;
+        for(int i = 0; i < map.rows(); i++)
+        {
+            for(int j = 0; j < map.cols(); j++)
+            {
+                Grass g = new Grass(i*50,j*50,50,50);
+                addObject(g,i*50,j*50);
+            }
+        }
+
+        timer = new Timer(999999999);
+        food = 0;
+        population = 0;
+        power = 0;
+        money = 500;
         jobs = 0;
 
         gameOver = false;
@@ -56,13 +81,17 @@ public class Level extends World {
         {
             addObject(new GameOver(), 0, 0);
         }
+
     }
 
     public int getPopulation()
     {
         return population;
     }
-    public int getFood() { return food; }
+    public int getFood()
+    {
+        return food;
+    }
     public int getPower()
     {
         return power;
@@ -106,24 +135,28 @@ public class Level extends World {
         for (int row = 0; row < map.rows(); row++) {
             for (int col = 0; col < map.cols(); col++) {
                 if (map.getCell(row, col) instanceof Factory) {
-
                     jo = jo + 16;
                     pow = pow - 2;
                 }
-                else if (map.getCell(row, col) instanceof WindTurbine)
+            }
+        }
+        for (int row = 0; row < map.rows(); row++)
+        {
+            for (int col = 0; col < map.cols(); col++)
+            {
+                if (map.getCell(row, col) instanceof WindTurbine)
                 {
                     pow = pow + 10;
                 }
-                else if (map.getCell(row, col) instanceof Farm)
+            }
+        }
+        for (int row = 0; row < map.rows(); row++)
+        {
+            for (int col = 0; col < map.cols(); col++)
+            {
+                if (map.getCell(row, col) instanceof Farm)
                 {
                     fo = fo + 32;
-                }
-                else if (map.getCell(row, col) instanceof Grass) {
-                    Grass g = (Grass) map.getCell(row, col);
-                    if (g.isAvailable()) {
-                        g.setUnavailable();
-                        map.setCell(row, col, g);
-                    }
                 }
             }
         }
@@ -146,7 +179,13 @@ public class Level extends World {
                         map.setCell(row, col, h);
                     }
                 }
-                else if (map.getCell(row, col) instanceof Road)
+            }
+        }
+        for (int row = 0; row < map.rows(); row++)
+        {
+            for (int col = 0; col < map.cols(); col++)
+            {
+                if (map.getCell(row, col) instanceof Road)
                 {
                     Road a = (Road) map.getCell(row, col);
                     for (int i = 0; i < 12; i++) {

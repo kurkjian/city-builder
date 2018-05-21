@@ -79,4 +79,9 @@ public class House extends Building
         return working;
     }
 
+    public String toString()
+    {
+        return "2";
+    }
+
 }

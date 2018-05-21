@@ -34,4 +34,9 @@ public class Factory extends Building
             setImage("img/factory 1.png");
         }
     }
+
+    public String toString()
+    {
+        return "3";
+    }
 }

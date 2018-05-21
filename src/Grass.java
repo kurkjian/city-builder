@@ -38,12 +38,14 @@ public class Grass extends Cell {
         setImage("img/grass-open.png");
     }
 
-    public void setUnavailable() {
-        available = false;
-        setImage("img/grass.png");
-    }
-
     public boolean isAvailable(){
         return available;
+    }
+
+    public String toString()
+    {
+        if(available)
+            return "-1";
+        return "0";
     }
 }
