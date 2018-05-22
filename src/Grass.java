@@ -43,6 +43,14 @@ public class Grass extends Cell {
         setImage("resources/grass.png");
     }
 
+    public void refresh()
+    {
+        if(available)
+            setImage("resources/grass-open.png");
+        else
+            setImage("resources/grass.png");
+    }
+
     public boolean isAvailable(){
         return available;
     }

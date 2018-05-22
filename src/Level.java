@@ -2,6 +2,8 @@ import mayflower.Color;
 import mayflower.World;
 import mayflower.*;
 
+import java.awt.*;
+
 
 public class Level extends World {
 
@@ -46,8 +48,20 @@ public class Level extends World {
         {
             for(int j = 0; j < map.cols(); j++)
             {
-                Grass g = new Grass(i*50,j*50,50,50);
-                addObject(g,i*50,j*50);
+                Cell c = map.getCell(i,j);
+                addObject(c,i*50,j*50);
+            }
+        }
+
+        for(int i = 0; i < map.rows(); i++)
+        {
+            for(int j = 0; j < map.cols(); j++)
+            {
+                Cell c = map.getCell(i,j);
+                if(c instanceof Road)
+                {
+                    ((Road) c).updateImage();
+                }
             }
         }
 
@@ -129,6 +143,12 @@ public class Level extends World {
     {
         int x = cell.getX() / 50;
         int y = cell.getY() / 50;
+
+        if(cell instanceof Grass)
+        {
+            ((Grass) cell).setUnavailable();
+        }
+
         for (int k = 0; k < 12; k++) {
             Cell c;
 
@@ -154,6 +174,14 @@ public class Level extends World {
                     g.setUnavailable();
                 }
             }
+            if(cell instanceof Grass)
+            {
+                if(c instanceof Road)
+                {
+                    ((Grass) cell).setAvailable();
+                }
+            }
+
         }
     }
 

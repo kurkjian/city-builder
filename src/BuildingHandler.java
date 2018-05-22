@@ -279,7 +279,7 @@ public class BuildingHandler extends Actor {
                 Cell newCell = newMap.getCell(i,j);
                 Cell currCell = map.getCell(i,j);
 
-                if(newCell instanceof Grass)
+                if(newCell instanceof Grass && currCell instanceof Grass)
                     newCell.setRotation(curr.getCell(i,j).getRotation());
                 if(currCell.getClass() == newCell.getClass())
                 {
@@ -304,10 +304,28 @@ public class BuildingHandler extends Actor {
                         }
                     }
                 }
+
+
             }
         }
 
         map = newMap;
+
+        for(int i = 0; i < map.rows(); i++)
+        {
+            for(int j = 0; j < map.cols(); j++)
+            {
+                Cell c = map.getCell(i , j);
+                if(c instanceof Grass)
+                {
+                    ((Grass) c).refresh();
+                }
+                if(c instanceof Road)
+                {
+                    l.renderAvailable(c);
+                }
+            }
+        }
         prevMap = map.copy();
     }
 

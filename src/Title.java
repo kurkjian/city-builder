@@ -41,14 +41,15 @@ public class Title extends World {
                         int tile = s.nextInt();
                         map.setCell(i,j, getTile(tile, i , j));
                     }
-                    s.nextLine();
+                    if(s.hasNextLine())
+                        s.nextLine();
                 }
-
                 World level = new Level(map);
                 Mayflower.setWorld(level);
             }
             catch (Exception e)
             {
+                e.printStackTrace();
                 World level = new Level();
                 Mayflower.setWorld(level);
             }
@@ -60,11 +61,11 @@ public class Title extends World {
     public Cell getTile(int id, int i, int j)
     {
         if(id == 0)
-            return new Grass(i * 50, j * 50, 50,50);
+            return new Grass(i , j , 50,50);
         if(id == 1)
-            return new Road(i * 50, j * 50, 50,50);
+            return new Road(i, j, 50,50);
         if(id == 2)
-            return new House(1,1);
+            return new House(i,j);
         if(id == 3)
             return new Factory(i,j);
         if(id == 4)
@@ -74,7 +75,7 @@ public class Title extends World {
 
         if(id == -1)
         {
-            Grass g = new Grass(i*50, j*50, 50,50);
+            Grass g = new Grass(i, j, 50,50);
             g.setAvailable();
             return g;
         }
