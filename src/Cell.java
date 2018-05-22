@@ -36,6 +36,16 @@ public class Cell extends Actor
         return y;
     }
 
+    public void setx(int x)
+    {
+        this.x = x;
+    }
+    public void sety(int y)
+    {
+        this.y = y;
+    }
+
+
     public List<Cell> getNeighbors(Level level, int x, int y)
     {
         Cell[][] map = level.getMap().getMap();

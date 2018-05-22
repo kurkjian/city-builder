@@ -133,8 +133,11 @@ public class BuildingHandler extends Actor {
         {
             save.updateSave(false);
             List<Actor> atMouse = Mayflower.mouseClicked();
+            l = (Level) getWorld();
             for(Actor a : atMouse)
             {
+                if(a instanceof BuildingHandler)
+                    continue;
                 int x = Mayflower.getMouseInfo().getX() / 50;
                 int y = Mayflower.getMouseInfo().getY() / 50;
                 if (a instanceof Grass && selected instanceof Road && a.getX() <= 1300)
@@ -146,6 +149,7 @@ public class BuildingHandler extends Actor {
                     l.setMoney(l.getMoney() - r.getCost());
 
                     r = (Road)(map.getCell(x, y));
+                    l.renderAvailable(r);
                     r.updateImage();
 
                     List<Cell> roads = r.getNeighbors(l, r.getx(), r.gety());
@@ -169,11 +173,16 @@ public class BuildingHandler extends Actor {
 
                     }
                 }
-                else if (selectable != null && a != null && selected instanceof Grass && a.getX() <= 1300)
+                else if (selected != null && a != null && selected instanceof Grass && a.getX() <= 1300)
                 {
-                    getWorld().addObject(selected, a.getX(), a.getY());
+                    l.addObject(selected, a.getX(), a.getY());
+                    selected.setx(((Cell) a).getx());
+                    selected.sety(((Cell) a).gety());
                     map.setCell(x, y, selected);
-                    getWorld().removeObject(a);
+                    boolean road = a instanceof Road;
+                    l.removeObject(a);
+                    if(road)
+                        l.renderAvailable(selected);
                 }
             }
             compareMaps();
@@ -272,8 +281,14 @@ public class BuildingHandler extends Actor {
 
                 if(newCell instanceof Grass)
                     newCell.setRotation(curr.getCell(i,j).getRotation());
-
-                if(!currCell.getClass().equals(newCell.getClass()))
+                if(currCell.getClass() == newCell.getClass())
+                {
+                    newCell.setImage(currCell.getImage());
+                    newCell.setRotation(currCell.getRotation());
+                    getWorld().removeObject(curr.getCell(i,j));
+                    getWorld().addObject(newCell, i * 50, j * 50);
+                }
+                else if(!currCell.getClass().equals(newCell.getClass()))
                 {
                     getWorld().removeObject(curr.getCell(i,j));
                     getWorld().addObject(newCell, i * 50, j * 50);
